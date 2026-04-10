@@ -1,7 +1,7 @@
 {
-  "name": "Project_Final",
+  "name": "Dispatcher_JP",
   "projectId": "c3117ef1-f056-4ca0-8afa-e7033bdb7dc6",
-  "description": "Robotic Enterprise Framework",
+  "description": "Job_Posting-Final Prj",
   "main": "Main.xaml",
   "dependencies": {
     "UiPath.Excel.Activities": "[3.4.1]",
