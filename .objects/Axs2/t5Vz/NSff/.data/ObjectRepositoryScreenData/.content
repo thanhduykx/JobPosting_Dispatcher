@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryScreenData ContentHash="nZbbbjZSm02vJx6kpH4tRg" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryScreenData.Data>
+    <TargetApp x:Key="TargetApp" Area="0, 0, 1920, 1028" BrowserType="Edge" IconBase64="iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAE8SURBVDhPpZI9TsNAEIWXKBX22uEC/J7ByWyUIhyAEiEMFTUlBZ3fKoDEKRAXoCH0NICA+AR0NEkKSpAoYNE4drAXIwUz0tNqx/u+nVmPEIVAzVNR6LZwKxXePKUNr/NNfeOS3uLvxfO58AOsSsJAEgyLzZmynFR49Ju9Fdsr/HZvTQYY20ZWZ++8CAowbhCWc3bUmFxmZt09mZ8QwsO0HY/0zm9m1u7JoBQyeRMhhKt0zMn1/b7ZOLw24XFsDs6G5vTiJTGybEhaxVUCkEq/27eWVWBDPMLzpIX04CwV5CEu4TWr4MO+9U8VVH0DR6GfthCFlf6C0psJoMocOC3cC2HmUoAQPJ4zTyJFo4UOFqfmPMQNEGdzn4dkOa600T5asr3f0UXdU3rbIVxKwlBS9Mkr75PJ66JuW/4dX1R5iHbDwoD9AAAAAElFTkSuQmCC" Selector="&lt;html app='msedge.exe' title='FPT Software job openings and vacancies | Jobstreet' /&gt;" Url="https://ph.jobstreet.com/companies/fpt-software-168553031076472/jobs" Version="V2">
+      <imageRef attrName="InformativeScreenshot" originalValue="7f62e5760d4214e2d5cd8acb3a36baa1.jpg" xmlns="">0-BgReUE6P0mn1MxI0Up_fg</imageRef>
+    </TargetApp>
+  </ObjectRepositoryScreenData.Data>
+</ObjectRepositoryScreenData>

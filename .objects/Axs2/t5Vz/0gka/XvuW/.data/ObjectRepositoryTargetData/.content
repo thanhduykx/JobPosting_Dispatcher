@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="s7s5cYGC3EibKQL6841FDA" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="ph.jobstreet.com/FPT-Software-jobs/at-this-company" CVScreenId="511393ab-fd96-4a4a-a296-dbab0a93a49f" DesignTimeRectangle="823, 781, 894, 30" ElementType="Text" FullSelectorArgument="&lt;webctrl idx='38' isleaf='1' parentid='app' tag='P' /&gt;" Guid="89bf76e9-d68d-4e7c-8010-2b9148130b7c" ImageBase64="" ScopeSelectorArgument="&lt;html app='msedge.exe' title='FPT Software Jobs in Philippines - Apr 2026 | Jobstreet' /&gt;" SearchSteps="Selector" Version="V6" Visibility="Interactive" WaitForReadyArgument="Interactive">
+      <imageRef attrName="InformativeScreenshot" originalValue="7839868b0b243a6123f72b4982f866d8.png" xmlns="">0sRCFxDt21U-8a8SL1wy86w</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">GetText</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

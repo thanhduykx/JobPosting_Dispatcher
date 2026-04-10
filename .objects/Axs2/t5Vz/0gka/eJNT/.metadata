@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Full time",
+  "Type": "Element",
+  "TaxonomyType": "Label",
+  "Id": "eJNTttl8t0yadVZLwK2gpQ",
+  "Reference": "naBWV6V6SEmp_YzFY4fxpA/eJNTttl8t0yadVZLwK2gpQ",
+  "ParentRef": "naBWV6V6SEmp_YzFY4fxpA/0gkab2vZDEOLauha7SGywQ",
+  "Created": "2026-04-10T15:29:49.0031152Z",
+  "Updated": "2026-04-10T15:29:49.0031152Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

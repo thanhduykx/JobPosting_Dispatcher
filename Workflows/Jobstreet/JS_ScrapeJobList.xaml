@@ -1,4 +1,13 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="JS_ScrapeJobList" VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="JS_ScrapeJobList_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="JS_ScrapeJobList" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="out_JobLinks" Type="OutArgument(scg:List(x:String))" />
+    <x:Property Name="in_Browser" Type="InOutArgument(ui:Browser)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>JS_ScrapeJobList_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -25,6 +34,8 @@
       <x:String>System.Windows.Markup</x:String>
       <x:String>GlobalVariablesNamespace</x:String>
       <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>System.Text.RegularExpressions</x:String>
+      <x:String>System.Linq.Expressions</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -37,12 +48,8 @@
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Data.Common</AssemblyReference>
-      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
       <AssemblyReference>System.Drawing</AssemblyReference>
-      <AssemblyReference>System.Drawing.Common</AssemblyReference>
-      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
       <AssemblyReference>System.Linq</AssemblyReference>
-      <AssemblyReference>System.Net.Mail</AssemblyReference>
       <AssemblyReference>System.ObjectModel</AssemblyReference>
       <AssemblyReference>System.Private.CoreLib</AssemblyReference>
       <AssemblyReference>System.Xaml</AssemblyReference>
@@ -50,13 +57,89 @@
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>UiPath.System.Activities</AssemblyReference>
       <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="JS_ScrapeJobList" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:List(x:String)" Name="lst_Links">
+        <Variable.Default>
+          <VisualBasicValue x:TypeArguments="scg:List(x:String)" ExpressionText="New List(Of String)" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:String" Name="str_PageHtml" />
+    </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:List(x:String)">[lst_Links]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:List(x:String)">[New List(Of String)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="Edge" DisplayName="Attach Browser — Jobstreet Listing" sap2010:WorkflowViewState.IdRef="BrowserScope_1" Selector="&lt;html app='msedge.exe' title='*Jobstreet*' /&gt;">
+      <ui:BrowserScope.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:GetAttribute ContinueOnError="True" Attribute="innerHTML" DisplayName="Get innerHTML of page BODY" sap2010:WorkflowViewState.IdRef="GetAttribute_1">
+              <ui:GetAttribute.Result>
+                <OutArgument x:TypeArguments="x:String">[str_PageHtml]</OutArgument>
+              </ui:GetAttribute.Result>
+              <ui:GetAttribute.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;webctrl tag='BODY' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32">
+                      <Literal x:TypeArguments="x:Int32" Value="15000" />
+                    </InArgument>
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:GetAttribute.Target>
+            </ui:GetAttribute>
+          </Sequence>
+        </ActivityAction>
+      </ui:BrowserScope.Body>
+    </ui:BrowserScope>
+    <ui:InvokeCode ContinueOnError="{x:Null}" DisplayName="Regex extract job links from HTML" sap2010:WorkflowViewState.IdRef="InvokeCode_1" Code="Dim baseUrl As String = &quot;https://ph.jobstreet.com&quot;&#xD;&#xA;Dim anchorRx As New System.Text.RegularExpressions.Regex(&quot;&lt;a[^&gt;]+&gt;&quot;, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xD;&#xA;Dim hrefRx As New System.Text.RegularExpressions.Regex(&quot;href=&quot;&quot;([^&quot;&quot;]*)&quot;&quot;&quot;, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xD;&#xA;Dim jobIdRx As New System.Text.RegularExpressions.Regex(&quot;/job/(\d+)&quot;, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xD;&#xA;&#xD;&#xA;Dim matches = anchorRx.Matches(html)&#xD;&#xA;Dim seen As New HashSet(Of String)&#xD;&#xA;&#xD;&#xA;For Each m As System.Text.RegularExpressions.Match In matches&#xD;&#xA;    Dim tag As String = m.Value&#xD;&#xA;    If tag.Contains(&quot;data-automation=&quot;&quot;job-list-view-job-link&quot;&quot;&quot;) Then&#xD;&#xA;        Dim hrefMatch = hrefRx.Match(tag)&#xD;&#xA;        If hrefMatch.Success Then&#xD;&#xA;            Dim rawHref As String = hrefMatch.Groups(1).Value.Replace(&quot;&amp;amp;&quot;, &quot;&amp;&quot;)&#xD;&#xA;            Dim idMatch = jobIdRx.Match(rawHref)&#xD;&#xA;            If idMatch.Success Then&#xD;&#xA;                Dim jobId As String = idMatch.Groups(1).Value&#xD;&#xA;                If Not seen.Contains(jobId) Then&#xD;&#xA;                    seen.Add(jobId)&#xD;&#xA;                    ' Construct final URL using the raw href from the tag '&#xD;&#xA;                    If rawHref.StartsWith(&quot;/&quot;) Then&#xD;&#xA;                        links.Add(baseUrl &amp; rawHref)&#xD;&#xA;                    Else&#xD;&#xA;                        links.Add(rawHref)&#xD;&#xA;                    End If&#xD;&#xA;                End If&#xD;&#xA;            End If&#xD;&#xA;        End If&#xD;&#xA;    End If&#xD;&#xA;Next">
+      <ui:InvokeCode.Arguments>
+        <scg:Dictionary x:TypeArguments="x:String, Argument">
+          <InArgument x:TypeArguments="x:String" x:Key="html">[str_PageHtml]</InArgument>
+          <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="links">[lst_Links]</InOutArgument>
+        </scg:Dictionary>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:List(x:String)">[out_JobLinks]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:List(x:String)">[lst_Links]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] [Jobstreet] [JS_ScrapeJobList] — Found &quot; &amp; lst_Links.Count.ToString &amp; &quot; job links.&quot;]" />
   </Sequence>
 </Activity>

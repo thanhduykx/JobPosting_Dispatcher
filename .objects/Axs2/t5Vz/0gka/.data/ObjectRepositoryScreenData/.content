@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryScreenData ContentHash="BbF9xcSZa0-60s-EWFhHzw" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryScreenData.Data>
+    <TargetApp x:Key="TargetApp" Area="0, 0, 1920, 1028" BrowserType="Edge" IconBase64="iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAE8SURBVDhPpZI9TsNAEIWXKBX22uEC/J7ByWyUIhyAEiEMFTUlBZ3fKoDEKRAXoCH0NICA+AR0NEkKSpAoYNE4drAXIwUz0tNqx/u+nVmPEIVAzVNR6LZwKxXePKUNr/NNfeOS3uLvxfO58AOsSsJAEgyLzZmynFR49Ju9Fdsr/HZvTQYY20ZWZ++8CAowbhCWc3bUmFxmZt09mZ8QwsO0HY/0zm9m1u7JoBQyeRMhhKt0zMn1/b7ZOLw24XFsDs6G5vTiJTGybEhaxVUCkEq/27eWVWBDPMLzpIX04CwV5CEu4TWr4MO+9U8VVH0DR6GfthCFlf6C0psJoMocOC3cC2HmUoAQPJ4zTyJFo4UOFqfmPMQNEGdzn4dkOa600T5asr3f0UXdU3rbIVxKwlBS9Mkr75PJ66JuW/4dX1R5iHbDwoD9AAAAAElFTkSuQmCC" Selector="&lt;html app='msedge.exe' title='FPT Software Jobs in Philippines - Apr 2026 | Jobstreet' /&gt;" Url="https://ph.jobstreet.com/FPT-Software-jobs/at-this-company?jobId=91442436&amp;type=standard" Version="V2">
+      <imageRef attrName="InformativeScreenshot" originalValue="f599df11e78e0a10aba93b53375a3a8f.jpg" xmlns="">0SrnaO_5dY0-mRpDBr2tA_Q</imageRef>
+    </TargetApp>
+  </ObjectRepositoryScreenData.Data>
+</ObjectRepositoryScreenData>

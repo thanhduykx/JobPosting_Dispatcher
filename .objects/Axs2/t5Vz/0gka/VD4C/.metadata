@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Metro Manila (Remote)",
+  "Type": "Element",
+  "TaxonomyType": "Label",
+  "Id": "VD4CajufC0eAy1AWxWBw-Q",
+  "Reference": "naBWV6V6SEmp_YzFY4fxpA/VD4CajufC0eAy1AWxWBw-Q",
+  "ParentRef": "naBWV6V6SEmp_YzFY4fxpA/0gkab2vZDEOLauha7SGywQ",
+  "Created": "2026-04-10T15:28:56.0658035Z",
+  "Updated": "2026-04-10T15:28:56.0658035Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

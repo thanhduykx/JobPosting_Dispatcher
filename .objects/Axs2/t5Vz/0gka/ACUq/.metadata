@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Senior SAP BTP Integrat…",
+  "Type": "Element",
+  "TaxonomyType": "Label",
+  "Id": "ACUq5aWbF0KTkg78SV6ImQ",
+  "Reference": "naBWV6V6SEmp_YzFY4fxpA/ACUq5aWbF0KTkg78SV6ImQ",
+  "ParentRef": "naBWV6V6SEmp_YzFY4fxpA/0gkab2vZDEOLauha7SGywQ",
+  "Created": "2026-04-10T15:28:16.8041655Z",
+  "Updated": "2026-04-10T15:28:16.8041655Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

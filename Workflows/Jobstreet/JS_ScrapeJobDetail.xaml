@@ -1,4 +1,14 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="JS_ScrapeJobDetail" VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="JS_ScrapeJobDetail_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="JS_ScrapeJobDetail" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="out_Job" Type="OutArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="in_JobURL" Type="InArgument(x:String)" />
+    <x:Property Name="in_Browser" Type="InOutArgument(ui:Browser)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>JS_ScrapeJobDetail_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -25,6 +35,12 @@
       <x:String>System.Windows.Markup</x:String>
       <x:String>GlobalVariablesNamespace</x:String>
       <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Linq.Expressions</x:String>
+      <x:String>UiPath.UIAutomationCore.Contracts</x:String>
+      <x:String>UiPath.Platform.SyncObjects</x:String>
+      <x:String>System.Text.RegularExpressions</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -37,12 +53,8 @@
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Data.Common</AssemblyReference>
-      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
       <AssemblyReference>System.Drawing</AssemblyReference>
-      <AssemblyReference>System.Drawing.Common</AssemblyReference>
-      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
       <AssemblyReference>System.Linq</AssemblyReference>
-      <AssemblyReference>System.Net.Mail</AssemblyReference>
       <AssemblyReference>System.ObjectModel</AssemblyReference>
       <AssemblyReference>System.Private.CoreLib</AssemblyReference>
       <AssemblyReference>System.Xaml</AssemblyReference>
@@ -50,13 +62,121 @@
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>UiPath.System.Activities</AssemblyReference>
       <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="JS_ScrapeJobDetail" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="JS_ScrapeJobDetail" sap:VirtualizedContainerService.HintSize="865.2,1636.8" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="str_TypeOfPosting" />
+      <Variable x:TypeArguments="x:String" Name="str_Qualifications" />
+      <Variable x:TypeArguments="x:String" Name="str_Description" />
+      <Variable x:TypeArguments="x:String" Name="str_Headcount" />
+      <Variable x:TypeArguments="x:String" Name="str_CareerLevel" />
+      <Variable x:TypeArguments="x:String" Name="str_WorkSchedule" />
+      <Variable x:TypeArguments="x:String" Name="str_WorkSetup" />
+      <Variable x:TypeArguments="x:String" Name="str_Location" />
+      <Variable x:TypeArguments="x:String" Name="str_Title" />
+      <Variable x:TypeArguments="x:String" Name="str_FullText" />
+      <Variable x:TypeArguments="scg:Dictionary(x:String, x:Object)" Default="[New Dictionary(Of String, Object)]" Name="dict_Job" />
+    </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
+    <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="Edge" DisplayName="Attach Browser — Jobstreet" sap:VirtualizedContainerService.HintSize="483.2,902.4" sap2010:WorkflowViewState.IdRef="BrowserScope_1" InformativeScreenshot="d9268984361ef85aac247ab3b013669a" Selector="&lt;html app='msedge.exe' title='*Jobstreet*' /&gt;">
+      <ui:BrowserScope.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="449.6,723.2" sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:NavigateTo Browser="{x:Null}" DisplayName="Navigate to job URL" sap:VirtualizedContainerService.HintSize="416,117.6" sap2010:WorkflowViewState.IdRef="NavigateTo_1" Url="[in_JobURL]" />
+            <Delay DisplayName="Wait for page load" Duration="[TimeSpan.FromSeconds(4)]" sap:VirtualizedContainerService.HintSize="416,122.4" sap2010:WorkflowViewState.IdRef="Delay_1" />
+            <ui:GetAttribute Attribute="innertext" ContinueOnError="True" DisplayName="Get Job Title from H1" sap:VirtualizedContainerService.HintSize="416,216" sap2010:WorkflowViewState.IdRef="GetAttribute_1">
+              <ui:GetAttribute.Result>
+                <OutArgument x:TypeArguments="x:String">[str_Title]</OutArgument>
+              </ui:GetAttribute.Result>
+              <ui:GetAttribute.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="7db8459a-fc48-43d9-8e38-d47451da180b" Selector="&lt;webctrl tag='H1' /&gt;" TimeoutMS="10000">
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:GetAttribute.Target>
+            </ui:GetAttribute>
+            <ui:GetAttribute Attribute="innerhtml" ContinueOnError="True" DisplayName="Get Full Page Text" sap:VirtualizedContainerService.HintSize="416,207.2" sap2010:WorkflowViewState.IdRef="GetAttribute_2">
+              <ui:GetAttribute.Result>
+                <OutArgument x:TypeArguments="x:String">[str_FullText]</OutArgument>
+              </ui:GetAttribute.Result>
+              <ui:GetAttribute.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="f1f0355a-b6d8-4158-8e87-b6382dfe4bb2" Selector="&lt;webctrl tag='BODY' /&gt;" TimeoutMS="10000">
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:GetAttribute.Target>
+            </ui:GetAttribute>
+          </Sequence>
+        </ActivityAction>
+      </ui:BrowserScope.Body>
+    </ui:BrowserScope>
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="outTypeOfPosting = &quot;Direct Hire&quot;&#xA;outHeadcount = &quot;1&quot;&#xA;outWorkSchedule = &quot;Full time&quot;&#xA;outWorkSetup = &quot;&quot;&#xA;outLocation = &quot;&quot;&#xA;outDescription = &quot;&quot;&#xA;outQualifications = &quot;&quot;&#xA;outCareerLevel = &quot;&quot;&#xA;&#xA;If String.IsNullOrEmpty(fullText) Then Return&#xA;&#xA;' Extract Location&#xA;Dim locMatch = System.Text.RegularExpressions.Regex.Match(fullText, &quot;data-automation=&quot;&quot;job-detail-location&quot;&quot;[^&gt;]*&gt;([\s\S]*?)&lt;\/span&gt;&quot;, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xA;If locMatch.Success Then&#xA;    Dim locHtml As String = locMatch.Groups(1).Value&#xA;    Dim locText As String = System.Text.RegularExpressions.Regex.Replace(locHtml, &quot;&lt;[^&gt;]+&gt;&quot;, &quot;&quot;).Trim()&#xA;    outLocation = locText.Replace(&quot;&amp;nbsp;&quot;, &quot; &quot;).Replace(&quot;&amp;amp;&quot;, &quot;&amp;&quot;)&#xA;    &#xA;    If outLocation.Contains(&quot;(Remote)&quot;) Then&#xA;        outWorkSetup = &quot;Remote&quot;&#xA;        outLocation = outLocation.Replace(&quot;(Remote)&quot;, &quot;&quot;).Trim()&#xA;    ElseIf outLocation.Contains(&quot;(Hybrid)&quot;) Then&#xA;        outWorkSetup = &quot;Hybrid&quot;&#xA;        outLocation = outLocation.Replace(&quot;(Hybrid)&quot;, &quot;&quot;).Trim()&#xA;    ElseIf outLocation.Contains(&quot;(Onsite)&quot;) OrElse outLocation.Contains(&quot;(On-site)&quot;) Then&#xA;        outWorkSetup = &quot;Onsite&quot;&#xA;        outLocation = outLocation.Replace(&quot;(Onsite)&quot;, &quot;&quot;).Replace(&quot;(On-site)&quot;, &quot;&quot;).Trim()&#xA;    Else&#xA;        outWorkSetup = &quot;Onsite&quot;&#xA;    End If&#xA;End If&#xA;&#xA;If String.IsNullOrEmpty(outLocation) Then&#xA;    outWorkSetup = &quot;Onsite&quot;&#xA;End If&#xA;&#xA;' Parses description and qualifications&#xA;Dim descStart As Integer = fullText.IndexOf(&quot;&lt;strong&gt;Job Responsibilities:&lt;/strong&gt;&quot;, StringComparison.OrdinalIgnoreCase)&#xA;If descStart &lt; 0 Then descStart = fullText.IndexOf(&quot;Job Responsibilities:&quot;, StringComparison.OrdinalIgnoreCase)&#xA;If descStart &lt; 0 Then descStart = fullText.IndexOf(&quot;&lt;strong&gt;Role Description:&lt;/strong&gt;&quot;, StringComparison.OrdinalIgnoreCase)&#xA;&#xA;Dim qualStart As Integer = fullText.IndexOf(&quot;&lt;strong&gt;Job Qualification:&lt;/strong&gt;&quot;, StringComparison.OrdinalIgnoreCase)&#xA;If qualStart &lt; 0 Then qualStart = fullText.IndexOf(&quot;&lt;strong&gt;Qualifications:&lt;/strong&gt;&quot;, StringComparison.OrdinalIgnoreCase)&#xA;If qualStart &lt; 0 Then qualStart = fullText.IndexOf(&quot;Job Qualification:&quot;, StringComparison.OrdinalIgnoreCase)&#xA;&#xA;Dim endSection As Integer = fullText.IndexOf(&quot;data-automation=&quot;&quot;job-detail-additional-information&quot;&quot;&quot;, StringComparison.OrdinalIgnoreCase)&#xA;If endSection &lt; 0 Then endSection = fullText.IndexOf(&quot;&lt;strong&gt;Additional Information&quot;, StringComparison.OrdinalIgnoreCase)&#xA;&#xA;Dim waIndex As Integer = fullText.IndexOf(&quot;Work Arrangement:&quot;, StringComparison.OrdinalIgnoreCase)&#xA;If waIndex &gt; 0 AndAlso waIndex &gt; qualStart AndAlso (endSection &lt; 0 OrElse waIndex &lt; endSection) Then&#xA;    endSection = waIndex&#xA;End If&#xA;&#xA;If endSection &lt; 0 Then endSection = fullText.Length&#xA;&#xA;If descStart &gt;= 0 Then&#xA;    Dim endDesc As Integer = If(qualStart &gt; descStart, qualStart, endSection)&#xA;    Dim descHtml As String = fullText.Substring(descStart, endDesc - descStart)&#xA;    descHtml = System.Text.RegularExpressions.Regex.Replace(descHtml, &quot;&lt;br[^&gt;]*&gt;&quot;, vbCrLf, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xA;    descHtml = System.Text.RegularExpressions.Regex.Replace(descHtml, &quot;&lt;\/p&gt;&quot;, vbCrLf, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xA;    descHtml = System.Text.RegularExpressions.Regex.Replace(descHtml, &quot;&lt;\/li&gt;&quot;, vbCrLf, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xA;    descHtml = System.Text.RegularExpressions.Regex.Replace(descHtml, &quot;&lt;[^&gt;]+&gt;&quot;, &quot;&quot;)&#xA;    outDescription = descHtml.Replace(&quot;&amp;nbsp;&quot;, &quot; &quot;).Replace(&quot;&amp;amp;&quot;, &quot;&amp;&quot;).Trim()&#xA;    outDescription = System.Text.RegularExpressions.Regex.Replace(outDescription, &quot;^(Job Responsibilities|Role Description|Job Description)\s*:?\s*&quot;, &quot;&quot;, System.Text.RegularExpressions.RegexOptions.IgnoreCase).Trim()&#xA;End If&#xA;&#xA;If qualStart &gt;= 0 AndAlso endSection &gt; qualStart Then&#xA;    Dim qualHtml As String = fullText.Substring(qualStart, endSection - qualStart)&#xA;    qualHtml = System.Text.RegularExpressions.Regex.Replace(qualHtml, &quot;&lt;br[^&gt;]*&gt;&quot;, vbCrLf, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xA;    qualHtml = System.Text.RegularExpressions.Regex.Replace(qualHtml, &quot;&lt;\/p&gt;&quot;, vbCrLf, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xA;    qualHtml = System.Text.RegularExpressions.Regex.Replace(qualHtml, &quot;&lt;\/li&gt;&quot;, vbCrLf, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xA;    qualHtml = System.Text.RegularExpressions.Regex.Replace(qualHtml, &quot;&lt;[^&gt;]+&gt;&quot;, &quot;&quot;)&#xA;    outQualifications = qualHtml.Replace(&quot;&amp;nbsp;&quot;, &quot; &quot;).Replace(&quot;&amp;amp;&quot;, &quot;&amp;&quot;).Trim()&#xA;    outQualifications = System.Text.RegularExpressions.Regex.Replace(outQualifications, &quot;^(Job Qualification|Qualifications|REQUIREMENTS)\s*:?\s*&quot;, &quot;&quot;, System.Text.RegularExpressions.RegexOptions.IgnoreCase).Trim()&#xA;End If&#xA;&#xA;Dim crMatch = System.Text.RegularExpressions.Regex.Match(fullText, &quot;Career Level&lt;\/span&gt;.*?&lt;span[^&gt;]*&gt;(.*?)&lt;\/span&gt;&quot;, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xA;If crMatch.Success Then&#xA;    outCareerLevel = System.Text.RegularExpressions.Regex.Replace(crMatch.Groups(1).Value, &quot;&lt;[^&gt;]+&gt;&quot;, &quot;&quot;).Trim()&#xA;End If&#xA;&#xA;Dim wsMatch = System.Text.RegularExpressions.Regex.Match(fullText, &quot;Job Type&lt;\/span&gt;.*?&lt;span[^&gt;]*&gt;(.*?)&lt;\/span&gt;&quot;, System.Text.RegularExpressions.RegexOptions.IgnoreCase)&#xA;If wsMatch.Success Then&#xA;    outWorkSchedule = System.Text.RegularExpressions.Regex.Replace(wsMatch.Groups(1).Value, &quot;&lt;[^&gt;]+&gt;&quot;, &quot;&quot;).Trim()&#xA;End If" DisplayName="Parse Full Text into Fields" sap:VirtualizedContainerService.HintSize="483.2,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_1">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="fullText">[str_FullText]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outLocation">[str_Location]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outWorkSetup">[str_WorkSetup]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outWorkSchedule">[str_WorkSchedule]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outCareerLevel">[str_CareerLevel]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outHeadcount">[str_Headcount]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outDescription">[str_Description]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outQualifications">[str_Qualifications]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outTypeOfPosting">[str_TypeOfPosting]</OutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <Assign sap:VirtualizedContainerService.HintSize="483.2,174.4" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">[dict_Job]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" xml:space="preserve">[New Dictionary(Of String, Object) From {
+    {"Source",         "Jobstreet"},
+    {"JobTitle",       If(String.IsNullOrEmpty(str_Title), "", str_Title.Trim)},
+    {"Location",       If(String.IsNullOrEmpty(str_Location), "", str_Location.Trim)},
+    {"WorkSetup",      If(String.IsNullOrEmpty(str_WorkSetup), "Onsite", str_WorkSetup.Trim)},
+    {"WorkSchedule",   If(String.IsNullOrEmpty(str_WorkSchedule), "Full time", str_WorkSchedule.Trim)},
+    {"CareerLevel",    If(String.IsNullOrEmpty(str_CareerLevel), "", str_CareerLevel.Trim)},
+    {"Headcount",      If(String.IsNullOrEmpty(str_Headcount), "1", str_Headcount.Trim)},
+    {"JobDescription", If(String.IsNullOrEmpty(str_Description), "", str_Description.Trim)},
+    {"Qualifications", If(String.IsNullOrEmpty(str_Qualifications), "", str_Qualifications.Trim)},
+    {"TypeOfPosting",  If(String.IsNullOrEmpty(str_TypeOfPosting), "Direct Hire", str_TypeOfPosting.Trim)},
+    {"ApplyURL",       in_JobURL},
+    {"ScrapedAt",      DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}
+}]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign sap:VirtualizedContainerService.HintSize="483.2,174.4" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">[out_Job]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">[dict_Job]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="483.2,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] [Jobstreet] [JS_ScrapeJobDetail] — Scraped: &quot; &amp; str_Title]" />
   </Sequence>
 </Activity>
