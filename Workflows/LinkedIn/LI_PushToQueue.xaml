@@ -1,4 +1,12 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="LI_PushToQueue" VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="LI_PushToQueue_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="LI_PushToQueue" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_Job" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>LI_PushToQueue_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -25,6 +33,9 @@
       <x:String>System.Windows.Markup</x:String>
       <x:String>GlobalVariablesNamespace</x:String>
       <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Linq.Expressions</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -50,13 +61,50 @@
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>UiPath.System.Activities</AssemblyReference>
       <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>NPOI.Core</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.Collections.NonGeneric</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="LI_PushToQueue" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="LI_PushToQueue" sap:VirtualizedContainerService.HintSize="866,416" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
+    <ui:AddQueueItem ServiceBaseAddress="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Add Queue Item" FolderPath="Shared" sap:VirtualizedContainerService.HintSize="449.6,227.2" sap2010:WorkflowViewState.IdRef="AddQueueItem_1" Priority="Normal" QueueType="FPT_JobPosting_Queue">
+      <ui:AddQueueItem.ItemInformation>
+        <InArgument x:TypeArguments="x:String" x:Key="Source">[in_Job("Source").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="JobTitle">[in_Job("JobTitle").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="Location">[in_Job("Location").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="WorkSetup">[in_Job("WorkSetup").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="WorkSchedule">[in_Job("WorkSchedule").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="CareerLevel">[in_Job("CareerLevel").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="Headcount">[in_Job("Headcount").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="JobDescription">[in_Job("JobDescription").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="Qualifications">[in_Job("Qualifications").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TypeOfPosting">[in_Job("TypeOfPosting").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="ApplyURL">[in_Job("ApplyURL").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="ScrapedAt">[in_Job("ScrapedAt").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="PostedAt">[in_Job("PostedAt").ToString]</InArgument>
+      </ui:AddQueueItem.ItemInformation>
+    </ui:AddQueueItem>
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="449.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] [LinkedIn] [LI_PushToQueue] — Pushed: &quot; &amp; in_Job(&quot;JobTitle&quot;).ToString &amp; &quot; | PostedAt: &quot; &amp; in_Job(&quot;PostedAt&quot;).ToString]" />
   </Sequence>
 </Activity>

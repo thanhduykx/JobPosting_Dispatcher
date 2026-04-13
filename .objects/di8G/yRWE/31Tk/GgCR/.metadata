@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Ho Chi Minh City, Vietn…",
+  "Type": "Element",
+  "TaxonomyType": "Label",
+  "Id": "GgCRd72roku6ARdyyefyeQ",
+  "Reference": "naBWV6V6SEmp_YzFY4fxpA/GgCRd72roku6ARdyyefyeQ",
+  "ParentRef": "naBWV6V6SEmp_YzFY4fxpA/31TkOZ9_3EW1srnmKnkJcg",
+  "Created": "2026-04-13T05:30:42.7454236Z",
+  "Updated": "2026-04-13T05:30:42.7454236Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.12.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

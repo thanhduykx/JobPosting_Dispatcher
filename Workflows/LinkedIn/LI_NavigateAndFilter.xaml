@@ -96,20 +96,12 @@
       <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="LI_NavigateAndFilter" sap:VirtualizedContainerService.HintSize="865.2,1459.2" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="LI_NavigateAndFilter" sap:VirtualizedContainerService.HintSize="865.2,2136" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="str_FilterURL" />
       <Variable x:TypeArguments="x:String" Name="str_Username" />
-      <Variable x:TypeArguments="x:Boolean" Name="filterActive">
-        <Variable.Default>
-          <Literal x:TypeArguments="x:Boolean" />
-        </Variable.Default>
-      </Variable>
-      <Variable x:TypeArguments="x:Boolean" Name="loginExists">
-        <Variable.Default>
-          <Literal x:TypeArguments="x:Boolean" />
-        </Variable.Default>
-      </Variable>
+      <Variable x:TypeArguments="x:Boolean" Default="False" Name="filterActive" />
+      <Variable x:TypeArguments="x:Boolean" Default="False" Name="loginExists" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -203,13 +195,45 @@
         </Sequence>
       </If.Else>
     </If>
-    <ui:InvokeCode ContinueOnError="{x:Null}" Code="' Lấy URL hiện tại của trang jobs search rồi thêm filter Past 24h&#xD;&#xA;str_FilterURL = &quot;https://www.linkedin.com/jobs/search/?f_C=208401&amp;f_TPR=r86400&amp;geoId=92000000&amp;origin=COMPANY_PAGE_JOBS_CLUSTER_EXPANSION&quot;" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="518.4,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_1">
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="' Lấy URL hiện tại của trang jobs search rồi thêm filter Past 24h&#xA;str_FilterURL = &quot;https://www.linkedin.com/jobs/search/?f_C=208401&amp;f_TPR=r86400&amp;geoId=92000000&amp;origin=COMPANY_PAGE_JOBS_CLUSTER_EXPANSION&quot;" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="518.4,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_1">
       <ui:InvokeCode.Arguments>
-        <OutArgument x:TypeArguments="x:String" x:Key="str_FilterURL">
-          <VisualBasicReference x:TypeArguments="x:String" ExpressionText="str_FilterURL" />
-        </OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="str_FilterURL">[str_FilterURL]</OutArgument>
       </ui:InvokeCode.Arguments>
     </ui:InvokeCode>
-    <ui:NavigateTo Browser="{x:Null}" DisplayName="Navigate To" sap:VirtualizedContainerService.HintSize="518.4,108.8" sap2010:WorkflowViewState.IdRef="NavigateTo_1" Url="[str_FilterURL]" />
+    <ui:NavigateTo Browser="{x:Null}" DisplayName="Navigate To" sap:VirtualizedContainerService.HintSize="518.4,117.6" sap2010:WorkflowViewState.IdRef="NavigateTo_1" Url="[str_FilterURL]" />
+    <ui:UiElementExists DisplayName="Element Exists 'BUTTON  searchFilter_ti...'" Exists="[filterActive]" sap:VirtualizedContainerService.HintSize="518.4,139.2" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="dcbb510c-c825-4bcd-a4a5-382c3f733cc7" InformativeScreenshot="5f37c798af615e3e5782eb990204d591" Selector="&lt;html app='msedge.exe' title='(14) Tìm kiếm tất cả Việc làm | LinkedIn' /&gt;&lt;webctrl id='searchFilter_timePostedRange' tag='BUTTON' /&gt;">
+          <ui:Target.TimeoutMS>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:Target.TimeoutMS>
+          <ui:Target.WaitForReady>
+            <InArgument x:TypeArguments="ui:WaitForReady" />
+          </ui:Target.WaitForReady>
+        </ui:Target>
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[filterActive = False]" sap:VirtualizedContainerService.HintSize="518.4,528.8" sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Then>
+        <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="449.6,173.6" sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <Throw Exception="[New BusinessRuleException(&quot;LinkedIn 24h filter not applied correctly&quot;)]" sap:VirtualizedContainerService.HintSize="416,113.6" sap2010:WorkflowViewState.IdRef="Throw_1" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="449.6,225.6" sap2010:WorkflowViewState.IdRef="Sequence_7">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="416,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] [LinkedIn] [LI_NavigateAndFilter] — Navigated and 24h filter applied successfully.&quot;]" />
+        </Sequence>
+      </If.Else>
+    </If>
   </Sequence>
 </Activity>

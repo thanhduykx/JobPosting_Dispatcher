@@ -1,4 +1,13 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="LI_ScrapeJobDetail" VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="LI_ScrapeJobDetail_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="LI_ScrapeJobDetail" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uix="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="out_Job" Type="OutArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="in_JobURL" Type="InArgument(x:String)" />
+    <x:Property Name="in_Browser" Type="InOutArgument(ui:Browser)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>LI_ScrapeJobDetail_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -25,6 +34,19 @@
       <x:String>System.Windows.Markup</x:String>
       <x:String>GlobalVariablesNamespace</x:String>
       <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Linq.Expressions</x:String>
+      <x:String>UiPath.UIAutomationNext.Enums</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities.Models</x:String>
+      <x:String>UiPath.UIAutomationCore.Contracts</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>UiPath.Platform.ObjectLibrary</x:String>
+      <x:String>UiPath.Platform.SyncObjects</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>UiPath.UIAutomationNext.Models</x:String>
+      <x:String>System.Numerics</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -50,13 +72,168 @@
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>UiPath.System.Activities</AssemblyReference>
       <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>NPOI.Core</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.Collections.NonGeneric</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Testing.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.EventBasedAsync</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Primitives</AssemblyReference>
+      <AssemblyReference>System.Runtime.Numerics</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="LI_ScrapeJobDetail" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="LI_ScrapeJobDetail" sap:VirtualizedContainerService.HintSize="866,2481.6" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="str_PostedRaw" />
+      <Variable x:TypeArguments="x:String" Name="str_PostedAt" />
+      <Variable x:TypeArguments="x:String" Name="str_Qualifications" />
+      <Variable x:TypeArguments="x:String" Name="str_Description" />
+      <Variable x:TypeArguments="x:String" Name="str_CareerLevel" />
+      <Variable x:TypeArguments="x:String" Name="str_WorkSchedule" />
+      <Variable x:TypeArguments="x:String" Name="str_WorkSetup" />
+      <Variable x:TypeArguments="x:String" Name="str_Location" />
+      <Variable x:TypeArguments="x:String" Name="str_LocationRaw" />
+      <Variable x:TypeArguments="x:String" Name="str_Title" />
+      <Variable x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="dict_Job">
+        <Variable.Default>
+          <VisualBasicValue x:TypeArguments="scg:Dictionary(x:String, x:Object)" ExpressionText="Nothing" />
+        </Variable.Default>
+      </Variable>
+    </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
+    <ui:NavigateTo Browser="{x:Null}" DisplayName="Navigate To" sap:VirtualizedContainerService.HintSize="483.2,117.6" sap2010:WorkflowViewState.IdRef="NavigateTo_1" Url="[in_JobURL]" />
+    <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Edge (14) Tìm kiếm tất cả Việc làm  LinkedIn" HealingAgentBehavior="Job" sap:VirtualizedContainerService.HintSize="483.2,1061.6" sap2010:WorkflowViewState.IdRef="NApplicationCard_2" InteractionMode="DebuggerApi" ScopeGuid="52329bb5-3059-4f30-a890-233681e6428b" Version="V2">
+      <uix:NApplicationCard.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="WSSessionData" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="449.6,812.8" sap2010:WorkflowViewState.IdRef="Sequence_3">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <uix:NGetText DisplayName="Get Text 'Senior Frontend Develop…'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="416,189.6" sap2010:WorkflowViewState.IdRef="NGetText_2" ScopeIdentifier="52329bb5-3059-4f30-a890-233681e6428b" TextString="[str_Title]" Version="V5">
+              <uix:NGetText.Target>
+                <uix:TargetAnchorable BrowserURL="linkedin.com/jobs/search" ContentHash="ArIxRCUANkOKCv0XJ6BEoA" DesignTimeRectangle="444, 338, 380, 71" ElementType="Text" FullSelectorArgument="&lt;webctrl id='ember53' tag='A' /&gt;" Guid="4d440779-ab3f-452b-8cc7-9bfd798ead0a" InformativeScreenshot="a021364f1d606d0c991eef072a179619.png" Reference="naBWV6V6SEmp_YzFY4fxpA/_mvlXIefwEeuO2VVPagamg" ScopeSelectorArgument="&lt;html app='msedge.exe' title='(14) Tìm kiếm tất cả Việc làm | LinkedIn' /&gt;" SearchSteps="Selector" Version="V6" Visibility="Interactive" WaitForReadyArgument="Interactive" />
+              </uix:NGetText.Target>
+            </uix:NGetText>
+            <uix:NGetText DisplayName="Get Text 'Ho Chi Minh City, Vietn…'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="416,189.6" sap2010:WorkflowViewState.IdRef="NGetText_3" ScopeIdentifier="52329bb5-3059-4f30-a890-233681e6428b" TextString="[str_LocationRaw]" Version="V5">
+              <uix:NGetText.Target>
+                <uix:TargetAnchorable BrowserURL="linkedin.com/jobs/search" CVScreenId="b985a330-c702-4e8b-b9cd-dd00ca4e4b20" ContentHash="bhdpFGCT6Ei22P7TTj9Nrw" DesignTimeRectangle="100, 288, 204, 24" ElementType="Text" FullSelectorArgument="&lt;webctrl aaname='*' parentid='main' tag='SPAN' /&gt;" Guid="f9ee5e11-4d2f-4aec-9c7a-46ed70b9b193" ImageBase64="" InformativeScreenshot="78bb21474a45b7729c317c2427730b1f.png" Reference="naBWV6V6SEmp_YzFY4fxpA/GgCRd72roku6ARdyyefyeQ" ScopeSelectorArgument="&lt;html app='msedge.exe' title='(14) Tìm kiếm tất cả Việc làm | LinkedIn' /&gt;" SearchSteps="Selector" Version="V6" Visibility="Interactive" WaitForReadyArgument="Interactive" />
+              </uix:NGetText.Target>
+            </uix:NGetText>
+            <uix:NGetText DisplayName="Get Text '2 hours ago'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="416,189.6" sap2010:WorkflowViewState.IdRef="NGetText_4" ScopeIdentifier="52329bb5-3059-4f30-a890-233681e6428b" TextString="[str_PostedRaw]" Version="V5">
+              <uix:NGetText.Target>
+                <uix:TargetAnchorable BrowserURL="linkedin.com/jobs/search" CVScreenId="c663447a-f1c6-4df5-8e93-34fdbd971b37" ContentHash="bt0oU_oMr0S8OYB9WdtHSg" DesignTimeRectangle="1115, 426, 85, 21" ElementType="Text" FullSelectorArgument="&lt;webctrl aaname='* hours ago' parentid='main' tag='SPAN' /&gt;" Guid="9b91580a-2901-423e-8d31-2f9de6d91526" ImageBase64="" InformativeScreenshot="0be2ce26bba24464e85380d86ebf177b.png" Reference="naBWV6V6SEmp_YzFY4fxpA/LgPAXchfyU2g6QnSKtYd6g" ScopeSelectorArgument="&lt;html app='msedge.exe' title='(14) Search all Jobs | LinkedIn' /&gt;" SearchSteps="Selector" Version="V6" Visibility="Interactive" WaitForReadyArgument="Interactive" />
+              </uix:NGetText.Target>
+            </uix:NGetText>
+            <uix:NGetText DisplayName="Get Text 'FPT Software Share Show…'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="416,182.4" sap2010:WorkflowViewState.IdRef="NGetText_5" ScopeIdentifier="52329bb5-3059-4f30-a890-233681e6428b" TextString="[str_Description]" Version="V5">
+              <uix:NGetText.Target>
+                <uix:TargetAnchorable BrowserURL="linkedin.com/jobs/search" ContentHash="ybWjTn9RmkSvL4suvTi8NQ" DesignTimeRectangle="892, 274, 702, 750" FullSelectorArgument="&lt;webctrl class='jobs-search__job-details--wrapper' parentid='main' tag='DIV' /&gt;" Guid="9a9218c6-4b0f-48ca-8586-979737bb8f33" InformativeScreenshot="75a624733ec7a10cc0d8aaf0c46fc2b5.png" Reference="naBWV6V6SEmp_YzFY4fxpA/rgnv10WrV0Oo7kih_0Y73g" ScopeSelectorArgument="&lt;html app='msedge.exe' title='(14) Search all Jobs | LinkedIn' /&gt;" SearchSteps="Selector" Version="V6" Visibility="Interactive" WaitForReadyArgument="Interactive" />
+              </uix:NGetText.Target>
+            </uix:NGetText>
+          </Sequence>
+        </ActivityAction>
+      </uix:NApplicationCard.Body>
+      <uix:NApplicationCard.TargetApp>
+        <uix:TargetApp Area="-9, -9, 1938, 1038" BrowserType="Edge" ContentHash="JDtmFAPZFUmfMVMVY-7TuA" IconBase64="iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAALZSURBVFhH7VffS1NhGD6zZduRujEpUAvCugm66KbLoKuulbooCNLO2S5aoZIGRUJU5kV3GVJ/gQVFNYRIaueI82dLCq2b1C2z0JmliVvNPfF821lzbnPYjnjhCw/nO+/3ve/7fN/7/eCVpI0gdkUjCmRFL5FVvcxkFMtO3SI79Hhwh0cqPN9hsat6lazqPlnVP5uMPlnVq7a4XlpsTo8kyapOFMc7sE7gRLnaCQJcGrJLDLIrOrad0wTYTuPkf8BYjJmeAAOW13lxsnVYYG99T75JZCbAQHvqe9DeN4WF8BIWwhG090+hvC6vJDIT4JKfaB3Gr1AEhrBNHfvSOFsLNjCBWP6NFEREGpgCpmVdUkAwEDceZ01wQ+YS3B63zWFsdgKEtUZDwVmPwNYaTTinnmngvwEjIPXbnV3YdaEbJa7uxNg0wbMToDM6ufxoFLfcfgG2qaPD43feodkdwM3nfjQ9GcehqwPYfdGLU20jeOCZxIv3M3APBXHb7ceR629QtDJ4dgI2Rcf+xj5MfA8lNiHb1FmrPSKwIfOLEVx7PIanvmmxX5IlCmBsehFn7n9AkcMkAr8jUXz7GUaU0TKIP7iIo81vYVuejvwQMCSyFEVgJgTf+HyMUEr/vVdfsMPZZQ6B8J8l3O2cwOGmQZTV9uBYyxD6R+eWjRkcm0u9SfNHwPNxFqW1XhTGHy2ejNNtI+L+MMQfDKGioVf4zjuBlo7AsuNmUzQcvDKArz/CK+xNIXDj2biY9T8COioa0tuvG4FM9psENgnkTGDfpV5xeUzOhgTYps5araHx4Sdx29Epv/wvTCGQyT4nAgSfVRqQNcE2dXyS+fIdiOv55StpPNWr2SeNyU7AmEkyDD1vu2R9avDV7DMRYJHAYiF1oFlgEcRiSJJYHlldnRa7qlXGO8jOTPhkVau01r222J1arD6UVY0okBWNrLg0a0XpqlC0nSyEWRBvCPkL503cP2RijC4AAAAASUVORK5CYII=" InformativeScreenshot="406f8f3bcbfb3830407fdcd1261bca5e.jpg" Reference="naBWV6V6SEmp_YzFY4fxpA/31TkOZ9_3EW1srnmKnkJcg" Selector="&lt;html app='msedge.exe' title='(14) Tìm kiếm tất cả Việc làm | LinkedIn' /&gt;" Url="https://www.linkedin.com/jobs/search/?currentJobId=4399102907&amp;f_C=208401&amp;f_TPR=r86400&amp;geoId=92000000&amp;origin=COMPANY_PAGE_JOBS_CLUSTER_EXPANSION" Version="V2" />
+      </uix:NApplicationCard.TargetApp>
+    </uix:NApplicationCard>
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="Dim raw As String = str_LocationRaw&#xD;&#xA;If raw.ToLower.Contains(&quot;remote&quot;) Then&#xD;&#xA;    str_WorkSetup = &quot;Remote&quot;&#xD;&#xA;ElseIf raw.ToLower.Contains(&quot;hybrid&quot;) Then&#xD;&#xA;    str_WorkSetup = &quot;Hybrid&quot;&#xD;&#xA;ElseIf raw.ToLower.Contains(&quot;on-site&quot;) OrElse raw.ToLower.Contains(&quot;onsite&quot;) Then&#xD;&#xA;    str_WorkSetup = &quot;Onsite&quot;&#xD;&#xA;Else&#xD;&#xA;    str_WorkSetup = &quot;Onsite&quot;&#xD;&#xA;End If&#xD;&#xA;&#xD;&#xA;str_Location = System.Text.RegularExpressions.Regex.Replace(raw, &quot;\(.*?\)&quot;, &quot;&quot;).Trim&#xD;&#xA;str_Location = str_Location.Replace(&quot;· Remote&quot;, &quot;&quot;).Replace(&quot;· Hybrid&quot;, &quot;&quot;).Replace(&quot;· On-site&quot;, &quot;&quot;).Trim" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="483.2,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_1">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="str_LocationRaw">
+          <VisualBasicValue x:TypeArguments="x:String" ExpressionText="str_LocationRaw" />
+        </InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="str_WorkSetup">
+          <VisualBasicReference x:TypeArguments="x:String" ExpressionText="str_WorkSetup" />
+        </OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="str_Location">
+          <VisualBasicReference x:TypeArguments="x:String" ExpressionText="str_Location" />
+        </OutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="' LinkedIn hiện: &quot;10 hours ago&quot;, &quot;2 days ago&quot;&#xD;&#xA;Dim raw As String = str_PostedRaw.ToLower.Trim&#xD;&#xA;Dim result As DateTime = DateTime.Now&#xD;&#xA;&#xD;&#xA;If raw.Contains(&quot;hour&quot;) Then&#xD;&#xA;    Dim hours As Integer = Integer.Parse(System.Text.RegularExpressions.Regex.Match(raw, &quot;\d+&quot;).Value)&#xD;&#xA;    result = DateTime.Now.AddHours(-hours)&#xD;&#xA;ElseIf raw.Contains(&quot;minute&quot;) Then&#xD;&#xA;    Dim mins As Integer = Integer.Parse(System.Text.RegularExpressions.Regex.Match(raw, &quot;\d+&quot;).Value)&#xD;&#xA;    result = DateTime.Now.AddMinutes(-mins)&#xD;&#xA;ElseIf raw.Contains(&quot;day&quot;) Then&#xD;&#xA;    Dim days As Integer = Integer.Parse(System.Text.RegularExpressions.Regex.Match(raw, &quot;\d+&quot;).Value)&#xD;&#xA;    result = DateTime.Now.AddDays(-days)&#xD;&#xA;End If&#xD;&#xA;&#xD;&#xA;str_PostedAt = result.ToString(&quot;yyyy-MM-dd HH:mm:ss&quot;)" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="483.2,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_2">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="str_PostedRaw">
+          <VisualBasicValue x:TypeArguments="x:String" ExpressionText="str_PostedRaw" />
+        </InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="str_PostedAt">
+          <VisualBasicReference x:TypeArguments="x:String" ExpressionText="str_PostedAt" />
+        </OutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="Dim title As String = str_Title.ToLower&#xD;&#xA;If title.Contains(&quot;senior&quot;) OrElse title.Contains(&quot;sr.&quot;) Then&#xD;&#xA;    str_CareerLevel = &quot;Senior&quot;&#xD;&#xA;ElseIf title.Contains(&quot;junior&quot;) OrElse title.Contains(&quot;jr.&quot;) Then&#xD;&#xA;    str_CareerLevel = &quot;Junior&quot;&#xD;&#xA;ElseIf title.Contains(&quot;lead&quot;) OrElse title.Contains(&quot;principal&quot;) Then&#xD;&#xA;    str_CareerLevel = &quot;L3&quot;&#xD;&#xA;Else&#xD;&#xA;    str_CareerLevel = &quot;Mid&quot;&#xD;&#xA;End If" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="483.2,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_3">
+      <ui:InvokeCode.Arguments>
+        <scg:Dictionary x:TypeArguments="x:String, Argument" />
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <Assign sap:VirtualizedContainerService.HintSize="483.2,174.4" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[str_Description]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[If(str_Description.Length &gt; 500, str_Description.Substring(0, 500), str_Description)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign sap:VirtualizedContainerService.HintSize="483.2,174.4" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">[dict_Job]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" xml:space="preserve">[New Dictionary(Of String, Object) From {
+    {"Source",         "LinkedIn"},
+    {"JobTitle",       str_Title.Trim},
+    {"Location",       str_Location.Trim},
+    {"WorkSetup",      str_WorkSetup.Trim},
+    {"WorkSchedule",   "Dayshift"},
+    {"CareerLevel",    str_CareerLevel.Trim},
+    {"Headcount",      "1"},
+    {"JobDescription", str_Description.Trim},
+    {"Qualifications", str_Description.Trim},
+    {"TypeOfPosting",  "External"},
+    {"ApplyURL",       in_JobURL},
+    {"ScrapedAt",      DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")},
+    {"PostedAt",       str_PostedAt}
+}]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign sap:VirtualizedContainerService.HintSize="483.2,174.4" sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">[out_Job]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">[dict_Job]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="483.2,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] [LinkedIn] [LI_ScrapeJobDetail] — Scraped: &quot; &amp; str_Title]" />
   </Sequence>
 </Activity>

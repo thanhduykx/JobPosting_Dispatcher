@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Edge (14) Tìm kiếm tất cả Việc làm  LinkedIn",
+  "Type": "App",
+  "Id": "di8GIyxz50KYfxJGYOfzvw",
+  "Reference": "naBWV6V6SEmp_YzFY4fxpA/di8GIyxz50KYfxJGYOfzvw",
+  "Created": "2026-04-13T05:28:52.2894375Z",
+  "Updated": "2026-04-13T05:28:52.2894375Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.12.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

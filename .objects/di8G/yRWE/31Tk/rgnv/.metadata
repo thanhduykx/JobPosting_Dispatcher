@@ -1,0 +1,13 @@
+﻿{
+  "Name": "FPT Software Share Show…",
+  "Type": "Element",
+  "Id": "rgnv10WrV0Oo7kih_0Y73g",
+  "Reference": "naBWV6V6SEmp_YzFY4fxpA/rgnv10WrV0Oo7kih_0Y73g",
+  "ParentRef": "naBWV6V6SEmp_YzFY4fxpA/31TkOZ9_3EW1srnmKnkJcg",
+  "Created": "2026-04-13T05:32:58.2567166Z",
+  "Updated": "2026-04-13T05:32:58.2567166Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.12.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

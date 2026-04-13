@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="ArIxRCUANkOKCv0XJ6BEoA" Reference="naBWV6V6SEmp_YzFY4fxpA/_mvlXIefwEeuO2VVPagamg" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="linkedin.com/jobs/search" DesignTimeRectangle="444, 338, 380, 71" ElementType="Text" FullSelectorArgument="&lt;webctrl id='ember53' tag='A' /&gt;" Guid="4d440779-ab3f-452b-8cc7-9bfd798ead0a" ScopeSelectorArgument="&lt;html app='msedge.exe' title='(14) Tìm kiếm tất cả Việc làm | LinkedIn' /&gt;" SearchSteps="Selector" Version="V6" Visibility="Interactive" WaitForReadyArgument="Interactive">
+      <imageRef attrName="InformativeScreenshot" originalValue="a021364f1d606d0c991eef072a179619.png" xmlns="">0s6hQL5oOskaCH3XWd7GNng</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">GetText</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

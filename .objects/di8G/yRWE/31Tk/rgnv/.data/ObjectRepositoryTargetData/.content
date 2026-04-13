@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="ybWjTn9RmkSvL4suvTi8NQ" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="linkedin.com/jobs/search" DesignTimeRectangle="892, 274, 702, 750" FullSelectorArgument="&lt;webctrl class='jobs-search__job-details--wrapper' parentid='main' tag='DIV' /&gt;" Guid="9a9218c6-4b0f-48ca-8586-979737bb8f33" ScopeSelectorArgument="&lt;html app='msedge.exe' title='(14) Search all Jobs | LinkedIn' /&gt;" SearchSteps="Selector" Version="V6" Visibility="Interactive" WaitForReadyArgument="Interactive">
+      <imageRef attrName="InformativeScreenshot" originalValue="75a624733ec7a10cc0d8aaf0c46fc2b5.png" xmlns="">0LR6HQ7RHTUazzk8QWldLNA</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">GetText</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

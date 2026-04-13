@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Senior Frontend Develop…",
+  "Type": "Element",
+  "TaxonomyType": "Label",
+  "Id": "_mvlXIefwEeuO2VVPagamg",
+  "Reference": "naBWV6V6SEmp_YzFY4fxpA/_mvlXIefwEeuO2VVPagamg",
+  "ParentRef": "naBWV6V6SEmp_YzFY4fxpA/31TkOZ9_3EW1srnmKnkJcg",
+  "Created": "2026-04-13T05:29:18.8766325Z",
+  "Updated": "2026-04-13T05:29:18.8766325Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.12.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

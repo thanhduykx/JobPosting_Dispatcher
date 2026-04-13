@@ -1,0 +1,13 @@
+﻿{
+  "Name": "Edge (14) Tìm kiếm tất cả Việc làm  LinkedIn",
+  "Type": "Screen",
+  "Id": "31TkOZ9_3EW1srnmKnkJcg",
+  "Reference": "naBWV6V6SEmp_YzFY4fxpA/31TkOZ9_3EW1srnmKnkJcg",
+  "ParentRef": "naBWV6V6SEmp_YzFY4fxpA/yRWEWqYuKESojyTtqRVdMg",
+  "Created": "2026-04-13T05:28:52.3176228Z",
+  "Updated": "2026-04-13T05:28:52.3176228Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.12.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}
