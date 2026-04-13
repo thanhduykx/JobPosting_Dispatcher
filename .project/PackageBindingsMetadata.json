@@ -774,6 +774,38 @@
         "SubBindings": [],
         "DefaultValueSource": "Property"
       }
+    ],
+    "UiPath.IntegrationService.Activities.Runtime.Activities.ConnectorActivity": [
+      {
+        "PublishNullValues": false,
+        "SubBindings": [],
+        "FromInstanceProperty": "BindingsJson",
+        "DefaultValueSource": "Property"
+      }
+    ],
+    "UiPath.IntegrationService.Activities.Runtime.Activities.ConnectorHttpActivity": [
+      {
+        "PublishNullValues": false,
+        "SubBindings": [],
+        "FromInstanceProperty": "BindingsJson",
+        "DefaultValueSource": "Property"
+      }
+    ],
+    "UiPath.IntegrationService.Activities.Runtime.Activities.ConnectorPersistenceActivity": [
+      {
+        "PublishNullValues": false,
+        "SubBindings": [],
+        "FromInstanceProperty": "BindingsJson",
+        "DefaultValueSource": "Property"
+      }
+    ],
+    "UiPath.IntegrationService.Activities.Runtime.Activities.ConnectorTriggerActivity": [
+      {
+        "PublishNullValues": false,
+        "SubBindings": [],
+        "FromInstanceProperty": "BindingsJson",
+        "DefaultValueSource": "Property"
+      }
     ]
   }
 }

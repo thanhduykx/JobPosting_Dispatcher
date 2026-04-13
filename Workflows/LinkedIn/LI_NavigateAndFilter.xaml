@@ -1,4 +1,4 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="LI_NavigateAndFilter" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uix="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="LI_NavigateAndFilter" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="in_Browser" Type="InOutArgument(ui:Browser)" />
     <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
@@ -96,34 +96,43 @@
       <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="LI_NavigateAndFilter" sap:VirtualizedContainerService.HintSize="865.2,2136" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="LI_NavigateAndFilter" sap:VirtualizedContainerService.HintSize="866,2800" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="str_FilterURL" />
       <Variable x:TypeArguments="x:String" Name="str_Username" />
       <Variable x:TypeArguments="x:Boolean" Default="False" Name="filterActive" />
       <Variable x:TypeArguments="x:Boolean" Default="False" Name="loginExists" />
+      <Variable x:TypeArguments="x:Boolean" Default="False" Name="showAllExists" />
+      <Variable x:TypeArguments="x:String" Name="str_CompanyJobsURL" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:OpenBrowser AutomaticallyDownloadWebDriver="{x:Null}" CommunicationMethod="{x:Null}" Hidden="{x:Null}" NewSession="{x:Null}" Private="{x:Null}" UiBrowser="{x:Null}" BrowserType="Edge" DisplayName="Open Browser — Jobstreet" sap:VirtualizedContainerService.HintSize="518.4,449.6" sap2010:WorkflowViewState.IdRef="OpenBrowser_1" Url="[in_Config(&quot;LinkedIn_URL&quot;).ToString]">
+    <ui:LogMessage DisplayName="Log — Starting LinkedIn Navigation" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] [LinkedIn] [LI_NavigateAndFilter] — Opening FPT Software company jobs page...&quot;]" />
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="' Get company jobs page URL from config or use default&#xA;If in_Config IsNot Nothing AndAlso in_Config.ContainsKey(&quot;LinkedIn_CompanyJobsURL&quot;) AndAlso in_Config(&quot;LinkedIn_CompanyJobsURL&quot;) IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(in_Config(&quot;LinkedIn_CompanyJobsURL&quot;).ToString) Then&#xA;    str_CompanyJobsURL = in_Config(&quot;LinkedIn_CompanyJobsURL&quot;).ToString.Trim&#xA;Else&#xA;    str_CompanyJobsURL = &quot;https://www.linkedin.com/company/fpt-software/jobs/&quot;&#xA;End If" DisplayName="Get Company Jobs URL" sap:VirtualizedContainerService.HintSize="518.4,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_2">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="str_CompanyJobsURL">[str_CompanyJobsURL]</OutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <ui:OpenBrowser AutomaticallyDownloadWebDriver="{x:Null}" CommunicationMethod="{x:Null}" Hidden="{x:Null}" NewSession="{x:Null}" Private="{x:Null}" UiBrowser="[in_Browser]" BrowserType="Edge" DisplayName="Open Browser — LinkedIn Company Jobs" sap:VirtualizedContainerService.HintSize="518.4,520" sap2010:WorkflowViewState.IdRef="OpenBrowser_1" Url="[str_CompanyJobsURL]">
       <ui:OpenBrowser.Body>
         <ActivityAction x:TypeArguments="x:Object">
           <ActivityAction.Argument>
             <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
           </ActivityAction.Argument>
-          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="449.6,292" sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="449.6,380" sap2010:WorkflowViewState.IdRef="Sequence_4">
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
-            <Delay DisplayName="Wait for page load" Duration="[TimeSpan.FromSeconds(5)]" sap:VirtualizedContainerService.HintSize="416,122.4" sap2010:WorkflowViewState.IdRef="Delay_1" />
-            <ui:UiElementExists DisplayName="Check job title link exists" Exists="[loginExists]" sap:VirtualizedContainerService.HintSize="416,109.6" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+            <Delay DisplayName="Wait for company page load" Duration="[TimeSpan.FromSeconds(5)]" sap:VirtualizedContainerService.HintSize="416,122.4" sap2010:WorkflowViewState.IdRef="Delay_1" />
+            <ui:UiElementExists ContinueOnError="{x:Null}" DisplayName="Check Show All Jobs exists" Exists="[showAllExists]" sap:VirtualizedContainerService.HintSize="416,109.6" sap2010:WorkflowViewState.IdRef="UiElementExists_3" Result="{x:Null}">
               <ui:UiElementExists.Target>
-                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="5a79f6b9-0bec-4726-a40d-b8bc3f9c828c" Selector="&lt;webctrl css-selector='a[id^=&quot;job-title-&quot;]' tag='A' /&gt;" TimeoutMS="15000">
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="b1c2d3e4-f5a6-7890-abcd-ef1234567890" Selector="&lt;html app='msedge.exe' title='*FPT Software*' /&gt;&lt;webctrl css-selector='a.org-jobs-recently-posted-jobs-module__show-all-jobs-btn-link' tag='A' /&gt;" TimeoutMS="15000">
                   <ui:Target.WaitForReady>
                     <InArgument x:TypeArguments="ui:WaitForReady" />
                   </ui:Target.WaitForReady>
@@ -134,76 +143,59 @@
         </ActivityAction>
       </ui:OpenBrowser.Body>
     </ui:OpenBrowser>
-    <If Condition="[loginExists = True]" sap:VirtualizedContainerService.HintSize="518.4,680.8" sap2010:WorkflowViewState.IdRef="If_1">
+    <If Condition="[showAllExists]" sap:VirtualizedContainerService.HintSize="518.4,520" sap2010:WorkflowViewState.IdRef="If_3">
       <If.Then>
-        <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="516.8,452.8" sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <Sequence DisplayName="Click Show All Jobs" sap:VirtualizedContainerService.HintSize="516.8,360" sap2010:WorkflowViewState.IdRef="Sequence_9">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Use Application/Browser" HealingAgentBehavior="Job" sap:VirtualizedContainerService.HintSize="483.2,392.8" sap2010:WorkflowViewState.IdRef="NApplicationCard_1" IsDisplayNameAuto="True" ScopeGuid="b2963da1-748e-473d-992f-ed47ece0ac0e" Version="V2">
-            <uix:NApplicationCard.Body>
-              <ActivityAction x:TypeArguments="x:Object">
-                <ActivityAction.Argument>
-                  <DelegateInArgument x:TypeArguments="x:Object" Name="WSSessionData" />
-                </ActivityAction.Argument>
-                <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="449.6,193.6" sap2010:WorkflowViewState.IdRef="Sequence_5">
-                  <sap:WorkflowViewStateService.ViewState>
-                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-                    </scg:Dictionary>
-                  </sap:WorkflowViewStateService.ViewState>
-                  <ui:Click AlterIfDisabled="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'A  ember77'" sap:VirtualizedContainerService.HintSize="416,132" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT">
-                    <ui:Click.CursorPosition>
-                      <ui:CursorPosition Position="Center">
-                        <ui:CursorPosition.OffsetX>
-                          <InArgument x:TypeArguments="x:Int32" />
-                        </ui:CursorPosition.OffsetX>
-                        <ui:CursorPosition.OffsetY>
-                          <InArgument x:TypeArguments="x:Int32" />
-                        </ui:CursorPosition.OffsetY>
-                      </ui:CursorPosition>
-                    </ui:Click.CursorPosition>
-                    <ui:Click.Target>
-                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="af414c10-a3a2-43c3-858a-d4268a076010" InformativeScreenshot="1cfef49e41ea30d986b3340ec29875a3" Selector="&lt;html app='msedge.exe' title='(14) FPT Software:Việc làm | LinkedIn' /&gt;&lt;webctrl id='ember77' tag='A' /&gt;">
-                        <ui:Target.TimeoutMS>
-                          <InArgument x:TypeArguments="x:Int32" />
-                        </ui:Target.TimeoutMS>
-                        <ui:Target.WaitForReady>
-                          <InArgument x:TypeArguments="ui:WaitForReady" />
-                        </ui:Target.WaitForReady>
-                      </ui:Target>
-                    </ui:Click.Target>
-                  </ui:Click>
-                </Sequence>
-              </ActivityAction>
-            </uix:NApplicationCard.Body>
-            <uix:NApplicationCard.TargetApp>
-              <uix:TargetApp Area="0, 0, 0, 0" Version="V2" />
-            </uix:NApplicationCard.TargetApp>
-          </uix:NApplicationCard>
+          <ui:Click AlterIfDisabled="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" ClickType="CLICK_SINGLE" ContinueOnError="{x:Null}" CursorMotionType="{x:Null}" DisplayName="Click 'Show all jobs'" sap:VirtualizedContainerService.HintSize="416,130.4" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" UnblockInput="{x:Null}">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="c3d4e5f6-a7b8-9012-cdef-345678901234" Selector="&lt;html app='msedge.exe' title='*FPT Software*' /&gt;&lt;webctrl css-selector='a.org-jobs-recently-posted-jobs-module__show-all-jobs-btn-link' tag='A' /&gt;" TimeoutMS="15000">
+                <ui:Target.WaitForReady>
+                  <InArgument x:TypeArguments="ui:WaitForReady" />
+                </ui:Target.WaitForReady>
+              </ui:Target>
+            </ui:Click.Target>
+          </ui:Click>
+          <ui:LogMessage DisplayName="Log — Clicked Show All Jobs" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] [LinkedIn] [LI_NavigateAndFilter] — Clicked 'Show all jobs' on company page.&quot;]" />
+          <Delay DisplayName="Wait for search page load" Duration="[TimeSpan.FromSeconds(3)]" sap:VirtualizedContainerService.HintSize="416,122.4" sap2010:WorkflowViewState.IdRef="Delay_2" />
         </Sequence>
       </If.Then>
       <If.Else>
-        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="516.8,89.6" sap2010:WorkflowViewState.IdRef="Sequence_3">
+        <Sequence DisplayName="Fallback — direct navigate" sap:VirtualizedContainerService.HintSize="516.8,225.6" sap2010:WorkflowViewState.IdRef="Sequence_2">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log — Show All Jobs not found, using direct URL" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Warn" Message="[&quot;[FPT_JobPosting_Dispatcher] [LinkedIn] [LI_NavigateAndFilter] — 'Show all jobs' button not found. Navigating directly to search URL.&quot;]" />
         </Sequence>
       </If.Else>
     </If>
-    <ui:InvokeCode ContinueOnError="{x:Null}" Code="' Lấy URL hiện tại của trang jobs search rồi thêm filter Past 24h&#xA;str_FilterURL = &quot;https://www.linkedin.com/jobs/search/?f_C=208401&amp;f_TPR=r86400&amp;geoId=92000000&amp;origin=COMPANY_PAGE_JOBS_CLUSTER_EXPANSION&quot;" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="518.4,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_1">
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="' Lấy URL filter 24h từ config nếu có, fallback về URL mặc định&#xA;If in_Config IsNot Nothing AndAlso in_Config.ContainsKey(&quot;LinkedIn_Search24h_URL&quot;) AndAlso in_Config(&quot;LinkedIn_Search24h_URL&quot;) IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(in_Config(&quot;LinkedIn_Search24h_URL&quot;).ToString) Then&#xA;    str_FilterURL = in_Config(&quot;LinkedIn_Search24h_URL&quot;).ToString.Trim&#xA;Else&#xA;    str_FilterURL = &quot;https://www.linkedin.com/jobs/search/?f_C=208401&amp;f_TPR=r86400&amp;geoId=92000000&amp;origin=COMPANY_PAGE_JOBS_CLUSTER_EXPANSION&quot;&#xA;End If" DisplayName="Get 24h Filter URL" sap:VirtualizedContainerService.HintSize="518.4,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_1">
       <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
         <OutArgument x:TypeArguments="x:String" x:Key="str_FilterURL">[str_FilterURL]</OutArgument>
       </ui:InvokeCode.Arguments>
     </ui:InvokeCode>
-    <ui:NavigateTo Browser="{x:Null}" DisplayName="Navigate To" sap:VirtualizedContainerService.HintSize="518.4,117.6" sap2010:WorkflowViewState.IdRef="NavigateTo_1" Url="[str_FilterURL]" />
-    <ui:UiElementExists DisplayName="Element Exists 'BUTTON  searchFilter_ti...'" Exists="[filterActive]" sap:VirtualizedContainerService.HintSize="518.4,139.2" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
+    <ui:NavigateTo Browser="[in_Browser]" ContinueOnError="{x:Null}" DisplayName="Navigate to 24h Filter URL" sap:VirtualizedContainerService.HintSize="518.4,117.6" sap2010:WorkflowViewState.IdRef="NavigateTo_1" Url="[str_FilterURL]" />
+    <Delay DisplayName="Wait for filter page load" Duration="[TimeSpan.FromSeconds(3)]" sap:VirtualizedContainerService.HintSize="518.4,122.4" sap2010:WorkflowViewState.IdRef="Delay_3" />
+    <ui:UiElementExists ContinueOnError="{x:Null}" DisplayName="Check 24h filter applied" Exists="[filterActive]" sap:VirtualizedContainerService.HintSize="518.4,139.2" sap2010:WorkflowViewState.IdRef="UiElementExists_2" Result="{x:Null}">
       <ui:UiElementExists.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="dcbb510c-c825-4bcd-a4a5-382c3f733cc7" InformativeScreenshot="5f37c798af615e3e5782eb990204d591" Selector="&lt;html app='msedge.exe' title='(14) Tìm kiếm tất cả Việc làm | LinkedIn' /&gt;&lt;webctrl id='searchFilter_timePostedRange' tag='BUTTON' /&gt;">
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="dcbb510c-c825-4bcd-a4a5-382c3f733cc7" Selector="&lt;html app='msedge.exe' title='*LinkedIn*' /&gt;&lt;webctrl id='searchFilter_timePostedRange' tag='BUTTON' /&gt;">
           <ui:Target.TimeoutMS>
             <InArgument x:TypeArguments="x:Int32" />
           </ui:Target.TimeoutMS>

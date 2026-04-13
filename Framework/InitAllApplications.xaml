@@ -60,7 +60,7 @@
       <AssemblyReference>WindowsBase</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Dispatcher: Open browser, scrape all Jobstreet jobs, validate, and push to Orchestrator queue." DisplayName="Initialize All Applications" sap2010:WorkflowViewState.IdRef="Sequence_9">
+  <Sequence sap2010:Annotation.AnnotationText="Dispatcher: Open browser, scrape all Jobstreet jobs, then LinkedIn jobs, validate, and push to Orchestrator queue." DisplayName="Initialize All Applications" sap2010:WorkflowViewState.IdRef="Sequence_9">
     <Sequence.Variables>
       <Variable x:TypeArguments="ui:Browser" Name="browser" />
       <Variable x:TypeArguments="scg:List(x:String)" Name="lst_JobLinks">
@@ -77,6 +77,24 @@
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="x:Int32" Name="int_Skipped">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:Int32" Value="0" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="scg:List(x:String)" Name="lst_LI_JobLinks">
+        <Variable.Default>
+          <VisualBasicValue x:TypeArguments="scg:List(x:String)" ExpressionText="New List(Of String)" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="dict_LI_CurrentJob" />
+      <Variable x:TypeArguments="x:Boolean" Name="bool_LI_IsValid" />
+      <Variable x:TypeArguments="x:String" Name="str_LI_InvalidReason" />
+      <Variable x:TypeArguments="x:Int32" Name="int_LI_Pushed">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:Int32" Value="0" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:Int32" Name="int_LI_Skipped">
         <Variable.Default>
           <Literal x:TypeArguments="x:Int32" Value="0" />
         </Variable.Default>
@@ -191,5 +209,129 @@
       </ui:ForEach.Body>
     </ui:ForEach>
     <ui:LogMessage DisplayName="Log — Dispatch Complete" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] Jobstreet dispatch complete. Pushed: &quot; &amp; int_Pushed.ToString &amp; &quot;, Skipped: &quot; &amp; int_Skipped.ToString &amp; &quot;, Total: &quot; &amp; lst_JobLinks.Count.ToString]" />
+    <ui:LogMessage DisplayName="Log — Starting LinkedIn Dispatcher" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] Starting LinkedIn Dispatcher...&quot;]" />
+    <TryCatch DisplayName="Try LinkedIn Scraping" sap2010:WorkflowViewState.IdRef="TryCatch_2">
+      <TryCatch.Try>
+        <Sequence DisplayName="LinkedIn Scrape → Validate → Push" sap2010:WorkflowViewState.IdRef="Sequence_10">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="LI Step 1 — Navigate and Filter" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_10" UnSafe="False" WorkflowFileName="Workflows\LinkedIn\LI_NavigateAndFilter.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InOutArgument x:TypeArguments="ui:Browser" x:Key="in_Browser">[browser]</InOutArgument>
+              <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="LI Step 2 — Handle Infinite Scroll" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_11" UnSafe="False" WorkflowFileName="Workflows\LinkedIn\LI_HandleInfiniteScroll.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <OutArgument x:TypeArguments="scg:List(x:String)" x:Key="out_JobLinks">[lst_LI_JobLinks]</OutArgument>
+              <InArgument x:TypeArguments="ui:Browser" x:Key="in_Browser">[browser]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:LogMessage DisplayName="Log — LinkedIn job links found" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] [LinkedIn] Found &quot; &amp; lst_LI_JobLinks.Count.ToString &amp; &quot; job links. Processing each...&quot;]" />
+          <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" DisplayName="For Each LinkedIn Job Link" sap2010:WorkflowViewState.IdRef="ForEach_2" Values="[lst_LI_JobLinks]">
+            <ui:ForEach.Body>
+              <ActivityAction x:TypeArguments="x:String">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="x:String" Name="currentLIJobUrl" />
+                </ActivityAction.Argument>
+                <TryCatch DisplayName="Try Process LinkedIn Job" sap2010:WorkflowViewState.IdRef="TryCatch_3">
+                  <TryCatch.Try>
+                    <Sequence DisplayName="LI Scrape → Validate → Push" sap2010:WorkflowViewState.IdRef="Sequence_11">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="LI Scrape Job Detail" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_12" UnSafe="False" WorkflowFileName="Workflows\LinkedIn\LI_ScrapeJobDetail.xaml">
+                        <ui:InvokeWorkflowFile.Arguments>
+                          <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="out_Job">[dict_LI_CurrentJob]</OutArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_JobURL">[currentLIJobUrl]</InArgument>
+                          <InOutArgument x:TypeArguments="ui:Browser" x:Key="in_Browser">[browser]</InOutArgument>
+                          <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                        </ui:InvokeWorkflowFile.Arguments>
+                      </ui:InvokeWorkflowFile>
+                      <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="LI Validate Job Data" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_13" UnSafe="False" WorkflowFileName="Workflows\LinkedIn\LI_ValidateJobData.xaml">
+                        <ui:InvokeWorkflowFile.Arguments>
+                          <OutArgument x:TypeArguments="x:String" x:Key="out_InvalidReason">[str_LI_InvalidReason]</OutArgument>
+                          <OutArgument x:TypeArguments="x:Boolean" x:Key="out_IsValid">[bool_LI_IsValid]</OutArgument>
+                          <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Job">[dict_LI_CurrentJob]</InArgument>
+                        </ui:InvokeWorkflowFile.Arguments>
+                      </ui:InvokeWorkflowFile>
+                      <If Condition="[bool_LI_IsValid]" DisplayName="If Valid — Push to Queue (LinkedIn)" sap2010:WorkflowViewState.IdRef="If_2">
+                        <If.Then>
+                          <Sequence DisplayName="LI Push to Queue" sap2010:WorkflowViewState.IdRef="Sequence_12">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="LI Push to Queue" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_14" UnSafe="False" WorkflowFileName="Workflows\LinkedIn\LI_PushToQueue.xaml">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Job">[dict_LI_CurrentJob]</InArgument>
+                                <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                              </ui:InvokeWorkflowFile.Arguments>
+                            </ui:InvokeWorkflowFile>
+                            <Assign sap2010:WorkflowViewState.IdRef="Assign_10">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Int32">[int_LI_Pushed]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Int32">[int_LI_Pushed + 1]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                          </Sequence>
+                        </If.Then>
+                        <If.Else>
+                          <Sequence DisplayName="LI Skip Invalid" sap2010:WorkflowViewState.IdRef="Sequence_13">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <Assign sap2010:WorkflowViewState.IdRef="Assign_11">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Int32">[int_LI_Skipped]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Int32">[int_LI_Skipped + 1]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                          </Sequence>
+                        </If.Else>
+                      </If>
+                    </Sequence>
+                  </TryCatch.Try>
+                  <TryCatch.Catches>
+                    <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch_2">
+                      <ActivityAction x:TypeArguments="s:Exception">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="s:Exception" Name="liJobException" />
+                        </ActivityAction.Argument>
+                        <ui:LogMessage DisplayName="Log — LinkedIn Job Error" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Warn" Message="[&quot;[FPT_JobPosting_Dispatcher] [LinkedIn] Error processing job: &quot; &amp; currentLIJobUrl &amp; &quot; — &quot; &amp; liJobException.Message]" />
+                      </ActivityAction>
+                    </Catch>
+                  </TryCatch.Catches>
+                </TryCatch>
+              </ActivityAction>
+            </ui:ForEach.Body>
+          </ui:ForEach>
+          <ui:LogMessage DisplayName="Log — LinkedIn Dispatch Complete" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] [LinkedIn] Dispatch complete. Pushed: &quot; &amp; int_LI_Pushed.ToString &amp; &quot;, Skipped: &quot; &amp; int_LI_Skipped.ToString &amp; &quot;, Total: &quot; &amp; lst_LI_JobLinks.Count.ToString]" />
+        </Sequence>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch_3">
+          <ActivityAction x:TypeArguments="s:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="s:Exception" Name="liException" />
+            </ActivityAction.Argument>
+            <ui:LogMessage DisplayName="Log — LinkedIn Dispatcher Error" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Error" Message="[&quot;[FPT_JobPosting_Dispatcher] [LinkedIn] Dispatcher failed: &quot; &amp; liException.Message &amp; &quot; at Source: &quot; &amp; liException.Source]" />
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+    <ui:LogMessage DisplayName="Log — All Dispatchers Complete" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Info" Message="[&quot;[FPT_JobPosting_Dispatcher] All dispatchers complete. JS Pushed: &quot; &amp; int_Pushed.ToString &amp; &quot;, LI Pushed: &quot; &amp; int_LI_Pushed.ToString]" />
   </Sequence>
 </Activity>

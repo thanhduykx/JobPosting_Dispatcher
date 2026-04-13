@@ -1,6 +1,6 @@
 <Activity mc:Ignorable="sap sap2010" x:Class="LI_ValidateJobData" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="out_InvalidReason" Type="InArgument(x:String)" />
+    <x:Property Name="out_InvalidReason" Type="OutArgument(x:String)" />
     <x:Property Name="out_IsValid" Type="OutArgument(x:Boolean)" />
     <x:Property Name="in_Job" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
   </x:Members>
@@ -95,11 +95,30 @@
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:InvokeCode ContinueOnError="{x:Null}" Code="out_IsValid = True&#xD;&#xA;out_InvalidReason = &quot;&quot;&#xD;&#xA;validWorkSetups = New List(Of String) From {&quot;Onsite&quot;, &quot;Hybrid&quot;, &quot;Remote&quot;, &quot;Hybrid/Onsite&quot;}" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="451.2,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_1">
-      <ui:InvokeCode.Arguments>
-        <scg:Dictionary x:TypeArguments="x:String, Argument" />
-      </ui:InvokeCode.Arguments>
-    </ui:InvokeCode>
+    <Assign sap:VirtualizedContainerService.HintSize="451.2,174.4" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[out_IsValid]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">[True]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign sap:VirtualizedContainerService.HintSize="451.2,174.4" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_InvalidReason]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[""]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign sap:VirtualizedContainerService.HintSize="451.2,174.4" sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:List(x:String)">[validWorkSetups]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:List(x:String)">[New List(Of String) From {"Onsite", "Hybrid", "Remote", "Hybrid/Onsite"}]</InArgument>
+      </Assign.Value>
+    </Assign>
     <If Condition="[String.IsNullOrEmpty(in_Job(&quot;JobTitle&quot;).ToString.Trim)]" sap:VirtualizedContainerService.HintSize="451.2,476" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
         <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="449.6,248" sap2010:WorkflowViewState.IdRef="Sequence_2">
@@ -133,7 +152,7 @@
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <ui:InvokeCode ContinueOnError="{x:Null}" Code="out_IsValid = False&#xD;&#xA;out_InvalidReason = &quot;JobTitle is empty&quot;" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="416,188" sap2010:WorkflowViewState.IdRef="InvokeCode_3">
+          <ui:InvokeCode ContinueOnError="{x:Null}" Code="out_IsValid = False&#xD;&#xA;out_InvalidReason = &quot;Location is empty&quot;" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="416,188" sap2010:WorkflowViewState.IdRef="InvokeCode_3">
             <ui:InvokeCode.Arguments>
               <scg:Dictionary x:TypeArguments="x:String, Argument" />
             </ui:InvokeCode.Arguments>
@@ -150,7 +169,7 @@
         </Sequence>
       </If.Else>
     </If>
-    <If Condition="[String.IsNullOrEmpty(in_Job(&quot;Location&quot;).ToString.Trim)]" sap:VirtualizedContainerService.HintSize="451.2,476" sap2010:WorkflowViewState.IdRef="If_3">
+    <If Condition="[String.IsNullOrEmpty(in_Job(&quot;WorkSetup&quot;).ToString.Trim)]" sap:VirtualizedContainerService.HintSize="451.2,476" sap2010:WorkflowViewState.IdRef="If_3">
       <If.Then>
         <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="449.6,248" sap2010:WorkflowViewState.IdRef="Sequence_4">
           <sap:WorkflowViewStateService.ViewState>
@@ -158,7 +177,7 @@
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <ui:InvokeCode ContinueOnError="{x:Null}" Code="out_IsValid = False&#xD;&#xA;out_InvalidReason = &quot;Location is empty&quot;" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="416,188" sap2010:WorkflowViewState.IdRef="InvokeCode_4">
+          <ui:InvokeCode ContinueOnError="{x:Null}" Code="out_IsValid = False&#xD;&#xA;out_InvalidReason = &quot;WorkSetup is empty&quot;" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="416,188" sap2010:WorkflowViewState.IdRef="InvokeCode_4">
             <ui:InvokeCode.Arguments>
               <scg:Dictionary x:TypeArguments="x:String, Argument" />
             </ui:InvokeCode.Arguments>
@@ -225,7 +244,7 @@
         </Sequence>
       </If.Else>
     </If>
-    <ui:InvokeCode ContinueOnError="{x:Null}" Code="Dim postedAt As DateTime = DateTime.Parse(in_Job(&quot;PostedAt&quot;).ToString)&#xD;&#xA;hoursAgo = (DateTime.Now - postedAt).TotalHours&#xD;&#xA;If hoursAgo &gt; 24 Then&#xD;&#xA;    out_IsValid = False&#xD;&#xA;    out_InvalidReason = &quot;PostedAt exceeds 24 hours: &quot; &amp; hoursAgo.ToString(&quot;F1&quot;) &amp; &quot;h ago&quot;&#xD;&#xA;End If" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="451.2,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_7">
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="Dim postedAtText As String = If(in_Job(&quot;PostedAt&quot;), String.Empty).ToString.Trim&#xD;&#xA;Dim postedAt As DateTime&#xD;&#xA;&#xD;&#xA;If String.IsNullOrWhiteSpace(postedAtText) Then&#xD;&#xA;    out_IsValid = False&#xD;&#xA;    out_InvalidReason = &quot;PostedAt is empty&quot;&#xD;&#xA;    hoursAgo = 0&#xD;&#xA;ElseIf Not DateTime.TryParse(postedAtText, postedAt) Then&#xD;&#xA;    out_IsValid = False&#xD;&#xA;    out_InvalidReason = &quot;PostedAt invalid: &quot; &amp; postedAtText&#xD;&#xA;    hoursAgo = 0&#xD;&#xA;Else&#xD;&#xA;    hoursAgo = (DateTime.Now - postedAt).TotalHours&#xD;&#xA;    If hoursAgo &gt; 24 Then&#xD;&#xA;        out_IsValid = False&#xD;&#xA;        out_InvalidReason = &quot;PostedAt exceeds 24 hours: &quot; &amp; hoursAgo.ToString(&quot;F1&quot;) &amp; &quot;h ago&quot;&#xD;&#xA;    End If&#xD;&#xA;End If" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="451.2,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_7">
       <ui:InvokeCode.Arguments>
         <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Job">
           <VisualBasicValue x:TypeArguments="scg:Dictionary(x:String, x:Object)" ExpressionText="in_Job" />

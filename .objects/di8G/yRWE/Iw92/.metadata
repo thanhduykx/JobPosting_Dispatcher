@@ -1,0 +1,13 @@
+﻿{
+  "Name": "Edge (14) FPT Software Jobs  LinkedIn",
+  "Type": "Screen",
+  "Id": "Iw92enRGIUSGOGraUYpkZw",
+  "Reference": "naBWV6V6SEmp_YzFY4fxpA/Iw92enRGIUSGOGraUYpkZw",
+  "ParentRef": "naBWV6V6SEmp_YzFY4fxpA/yRWEWqYuKESojyTtqRVdMg",
+  "Created": "2026-04-13T06:44:00.0616661Z",
+  "Updated": "2026-04-13T06:44:00.0616661Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.12.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

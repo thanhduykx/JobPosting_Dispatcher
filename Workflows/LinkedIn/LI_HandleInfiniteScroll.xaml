@@ -102,26 +102,15 @@
       <AssemblyReference>System.Linq.Queryable</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="LI_HandleInfiniteScroll" sap:VirtualizedContainerService.HintSize="865.2,3519.2" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="LI_HandleInfiniteScroll" sap:VirtualizedContainerService.HintSize="866,3734.4" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="currentHref" />
-      <Variable x:TypeArguments="scg:IEnumerable(ui:UiElement)" Name="lst_Cards">
-        <Variable.Default>
-          <VisualBasicValue x:TypeArguments="scg:IEnumerable(ui:UiElement)" ExpressionText="Nothing" />
-        </Variable.Default>
-      </Variable>
-      <Variable x:TypeArguments="x:Boolean" Name="noNewItems">
-        <Variable.Default>
-          <Literal x:TypeArguments="x:Boolean" />
-        </Variable.Default>
-      </Variable>
+      <Variable x:TypeArguments="scg:IEnumerable(ui:UiElement)" Default="[Nothing]" Name="lst_Cards" />
+      <Variable x:TypeArguments="x:Boolean" Default="False" Name="noNewItems" />
       <Variable x:TypeArguments="x:Int32" Name="currentCount" />
       <Variable x:TypeArguments="x:Int32" Name="previousCount" />
-      <Variable x:TypeArguments="scg:List(x:String)" Name="lst_Links">
-        <Variable.Default>
-          <VisualBasicValue x:TypeArguments="scg:List(x:String)" ExpressionText="New List(Of String)()" />
-        </Variable.Default>
-      </Variable>
+      <Variable x:TypeArguments="scg:List(x:String)" Default="[New List(Of String)()]" Name="lst_Links" />
+      <Variable x:TypeArguments="x:String" Name="str_JsOutput" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -152,158 +141,51 @@
         <InArgument x:TypeArguments="x:Boolean">[False]</InArgument>
       </Assign.Value>
     </Assign>
-    <ui:InterruptibleDoWhile CurrentIndex="{x:Null}" DisplayName="Do While" sap:VirtualizedContainerService.HintSize="518.4,733.6" sap2010:WorkflowViewState.IdRef="InterruptibleDoWhile_1">
+    <ui:InterruptibleDoWhile CurrentIndex="{x:Null}" Condition="[noNewItems = False]" DisplayName="Do While" sap:VirtualizedContainerService.HintSize="518.4,948.8" sap2010:WorkflowViewState.IdRef="InterruptibleDoWhile_1">
       <ui:InterruptibleDoWhile.Body>
-        <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="516.8,603.2" sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="516.8,818.4" sap2010:WorkflowViewState.IdRef="Sequence_2">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Use Application/Browser" HealingAgentBehavior="Job" sap:VirtualizedContainerService.HintSize="483.2,543.2" sap2010:WorkflowViewState.IdRef="NApplicationCard_1" IsDisplayNameAuto="True" ScopeGuid="97c3b1af-cd2a-4bc6-94f3-55f88d099b21" Version="V2">
+          <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Edge (14) Search all Jobs  LinkedIn" HealingAgentBehavior="Job" sap:VirtualizedContainerService.HintSize="483.2,758.4" sap2010:WorkflowViewState.IdRef="NApplicationCard_1" InteractionMode="DebuggerApi" ScopeGuid="97c3b1af-cd2a-4bc6-94f3-55f88d099b21" Version="V2">
             <uix:NApplicationCard.Body>
               <ActivityAction x:TypeArguments="x:Object">
                 <ActivityAction.Argument>
                   <DelegateInArgument x:TypeArguments="x:Object" Name="WSSessionData" />
                 </ActivityAction.Argument>
-                <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="449.6,344" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="449.6,518.4" sap2010:WorkflowViewState.IdRef="Sequence_3">
                   <sap:WorkflowViewStateService.ViewState>
                     <scg:Dictionary x:TypeArguments="x:String, x:Object">
                       <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                     </scg:Dictionary>
                   </sap:WorkflowViewStateService.ViewState>
-                  <uix:NInjectJsScript InputParameter="{x:Null}" ScriptOutput="{x:Null}" DisplayName="Inject Js Script" sap:VirtualizedContainerService.HintSize="416,282.4" sap2010:WorkflowViewState.IdRef="NInjectJsScript_1" ScriptCode="function (element, input) {&#xD;&#xA;window.scrollTo(0, document.body.scrollHeight)&#xD;&#xA;}" Version="V5" />
+                  <uix:NInjectJsScript InputParameter="{x:Null}" ScriptOutput="[str_JsOutput]" DisplayName="Inject Js Script to extract links" sap:VirtualizedContainerService.HintSize="416,289.6" sap2010:WorkflowViewState.IdRef="NInjectJsScript_1" ScriptCode="function (element, input) {&#xA;    var links = [];&#xA;    document.querySelectorAll('a.job-card-list__title--link').forEach(function(a) { &#xA;        if(a.href) links.push(a.href); &#xA;    });&#xA;    return JSON.stringify(links);&#xA;}" Version="V5" />
+                  <Assign sap:VirtualizedContainerService.HintSize="416,167.2" sap2010:WorkflowViewState.IdRef="Assign_8">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:Boolean">[noNewItems]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:Boolean">[True]</InArgument>
+                    </Assign.Value>
+                  </Assign>
                 </Sequence>
               </ActivityAction>
             </uix:NApplicationCard.Body>
             <uix:NApplicationCard.TargetApp>
-              <uix:TargetApp Area="0, 0, 0, 0" Version="V2" />
+              <uix:TargetApp Area="-9, -9, 1938, 1038" BrowserType="Edge" ContentHash="VPWPJTd9kECqAaJl6YPYpA" IconBase64="iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAALZSURBVFhH7VffS1NhGD6zZduRujEpUAvCugm66KbLoKuulbooCNLO2S5aoZIGRUJU5kV3GVJ/gQVFNYRIaueI82dLCq2b1C2z0JmliVvNPfF821lzbnPYjnjhCw/nO+/3ve/7fN/7/eCVpI0gdkUjCmRFL5FVvcxkFMtO3SI79Hhwh0cqPN9hsat6lazqPlnVP5uMPlnVq7a4XlpsTo8kyapOFMc7sE7gRLnaCQJcGrJLDLIrOrad0wTYTuPkf8BYjJmeAAOW13lxsnVYYG99T75JZCbAQHvqe9DeN4WF8BIWwhG090+hvC6vJDIT4JKfaB3Gr1AEhrBNHfvSOFsLNjCBWP6NFEREGpgCpmVdUkAwEDceZ01wQ+YS3B63zWFsdgKEtUZDwVmPwNYaTTinnmngvwEjIPXbnV3YdaEbJa7uxNg0wbMToDM6ufxoFLfcfgG2qaPD43feodkdwM3nfjQ9GcehqwPYfdGLU20jeOCZxIv3M3APBXHb7ceR629QtDJ4dgI2Rcf+xj5MfA8lNiHb1FmrPSKwIfOLEVx7PIanvmmxX5IlCmBsehFn7n9AkcMkAr8jUXz7GUaU0TKIP7iIo81vYVuejvwQMCSyFEVgJgTf+HyMUEr/vVdfsMPZZQ6B8J8l3O2cwOGmQZTV9uBYyxD6R+eWjRkcm0u9SfNHwPNxFqW1XhTGHy2ejNNtI+L+MMQfDKGioVf4zjuBlo7AsuNmUzQcvDKArz/CK+xNIXDj2biY9T8COioa0tuvG4FM9psENgnkTGDfpV5xeUzOhgTYps5araHx4Sdx29Epv/wvTCGQyT4nAgSfVRqQNcE2dXyS+fIdiOv55StpPNWr2SeNyU7AmEkyDD1vu2R9avDV7DMRYJHAYiF1oFlgEcRiSJJYHlldnRa7qlXGO8jOTPhkVau01r222J1arD6UVY0okBWNrLg0a0XpqlC0nSyEWRBvCPkL503cP2RijC4AAAAASUVORK5CYII=" InformativeScreenshot="485000ccddb533f8e4a52dbe86fba757.jpg" Reference="naBWV6V6SEmp_YzFY4fxpA/m_ciaUP7MkW_uKM2TkqyZA" Selector="&lt;html app='msedge.exe' title='*LinkedIn*' /&gt;" Url="https://www.linkedin.com/jobs/search/?currentJobId=4399102907&amp;f_C=208401&amp;f_TPR=r86400&amp;geoId=92000000&amp;origin=COMPANY_PAGE_JOBS_CLUSTER_EXPANSION" Version="V2" />
             </uix:NApplicationCard.TargetApp>
           </uix:NApplicationCard>
         </Sequence>
       </ui:InterruptibleDoWhile.Body>
-      <ui:InterruptibleDoWhile.Condition>
-        <VisualBasicValue x:TypeArguments="x:Boolean" DisplayName="Visual basic value" ExpressionText="noNewItems = False" />
-      </ui:InterruptibleDoWhile.Condition>
     </ui:InterruptibleDoWhile>
-    <Delay Duration="00:00:05" sap:VirtualizedContainerService.HintSize="518.4,122.4" sap2010:WorkflowViewState.IdRef="Delay_1" />
-    <ui:FindChildren Children="[lst_Cards]" DisplayName="Find Children 'STRONG'" Filter="&lt;webctrl /&gt;" sap:VirtualizedContainerService.HintSize="518.4,139.2" sap2010:WorkflowViewState.IdRef="FindChildren_1" Scope="FIND_CHILDREN">
-      <ui:FindChildren.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="c9ffbf22-33e4-4a38-9155-18c019d2dfde" InformativeScreenshot="2c44f57641383f92d4629d5b8a643288" Selector="&lt;html app='msedge.exe' title='(14) Tìm kiếm tất cả Việc làm | LinkedIn' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;main&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div' parentid='main' tag='DIV' /&gt;">
-          <ui:Target.TimeoutMS>
-            <InArgument x:TypeArguments="x:Int32" />
-          </ui:Target.TimeoutMS>
-          <ui:Target.WaitForReady>
-            <InArgument x:TypeArguments="ui:WaitForReady" />
-          </ui:Target.WaitForReady>
-        </ui:Target>
-      </ui:FindChildren.Target>
-    </ui:FindChildren>
-    <Assign sap:VirtualizedContainerService.HintSize="518.4,174.4" sap2010:WorkflowViewState.IdRef="Assign_4">
-      <Assign.To>
-        <OutArgument x:TypeArguments="x:Int32">[currentCount]</OutArgument>
-      </Assign.To>
-      <Assign.Value>
-        <InArgument x:TypeArguments="x:Int32">[lst_Cards.Count]</InArgument>
-      </Assign.Value>
-    </Assign>
-    <If Condition="[currentCount = previousCount]" sap:VirtualizedContainerService.HintSize="518.4,589.6" sap2010:WorkflowViewState.IdRef="If_1">
-      <If.Then>
-        <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="449.6,225.6" sap2010:WorkflowViewState.IdRef="Sequence_4">
-          <sap:WorkflowViewStateService.ViewState>
-            <scg:Dictionary x:TypeArguments="x:String, x:Object">
-              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            </scg:Dictionary>
-          </sap:WorkflowViewStateService.ViewState>
-          <Assign sap:VirtualizedContainerService.HintSize="416,165.6" sap2010:WorkflowViewState.IdRef="Assign_5">
-            <Assign.To>
-              <OutArgument x:TypeArguments="x:Boolean">[noNewItems]</OutArgument>
-            </Assign.To>
-            <Assign.Value>
-              <InArgument x:TypeArguments="x:Boolean">[True]</InArgument>
-            </Assign.Value>
-          </Assign>
-        </Sequence>
-      </If.Then>
-      <If.Else>
-        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="449.6,225.6" sap2010:WorkflowViewState.IdRef="Sequence_5">
-          <sap:WorkflowViewStateService.ViewState>
-            <scg:Dictionary x:TypeArguments="x:String, x:Object">
-              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            </scg:Dictionary>
-          </sap:WorkflowViewStateService.ViewState>
-          <Assign sap:VirtualizedContainerService.HintSize="416,165.6" sap2010:WorkflowViewState.IdRef="Assign_6">
-            <Assign.To>
-              <OutArgument x:TypeArguments="x:Int32">[previousCount]</OutArgument>
-            </Assign.To>
-            <Assign.Value>
-              <InArgument x:TypeArguments="x:Int32">[currentCount]</InArgument>
-            </Assign.Value>
-          </Assign>
-        </Sequence>
-      </If.Else>
-    </If>
-    <ui:ForEach x:TypeArguments="ui:UiElement" CurrentIndex="{x:Null}" DisplayName="For Each currentUiElement" sap:VirtualizedContainerService.HintSize="518.4,397.6" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[lst_Cards]">
-      <ui:ForEach.Body>
-        <ActivityAction x:TypeArguments="ui:UiElement">
-          <ActivityAction.Argument>
-            <DelegateInArgument x:TypeArguments="ui:UiElement" Name="currentUiElement" />
-          </ActivityAction.Argument>
-          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="449.6,267.2" sap2010:WorkflowViewState.IdRef="Sequence_6">
-            <sap:WorkflowViewStateService.ViewState>
-              <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-              </scg:Dictionary>
-            </sap:WorkflowViewStateService.ViewState>
-            <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="href" DisplayName="Get Attribute" sap:VirtualizedContainerService.HintSize="416,207.2" sap2010:WorkflowViewState.IdRef="GetAttribute_1">
-              <ui:GetAttribute.Result>
-                <OutArgument x:TypeArguments="x:String">[currentHref]</OutArgument>
-              </ui:GetAttribute.Result>
-              <ui:GetAttribute.Target>
-                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="0175210c-e2b3-43dc-a6a7-bffe90811866">
-                  <ui:Target.TimeoutMS>
-                    <InArgument x:TypeArguments="x:Int32" />
-                  </ui:Target.TimeoutMS>
-                  <ui:Target.WaitForReady>
-                    <InArgument x:TypeArguments="ui:WaitForReady" />
-                  </ui:Target.WaitForReady>
-                </ui:Target>
-              </ui:GetAttribute.Target>
-            </ui:GetAttribute>
-          </Sequence>
-        </ActivityAction>
-      </ui:ForEach.Body>
-    </ui:ForEach>
-    <If Condition="[Not String.IsNullOrEmpty(currentHref) AndAlso currentHref.Contains(&quot;/jobs/view/&quot;)]" sap:VirtualizedContainerService.HintSize="518.4,476" sap2010:WorkflowViewState.IdRef="If_2">
-      <If.Then>
-        <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="449.6,248" sap2010:WorkflowViewState.IdRef="Sequence_7">
-          <sap:WorkflowViewStateService.ViewState>
-            <scg:Dictionary x:TypeArguments="x:String, x:Object">
-              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            </scg:Dictionary>
-          </sap:WorkflowViewStateService.ViewState>
-          <ui:InvokeCode ContinueOnError="{x:Null}" Code="' Lấy URL sạch, bỏ query string tracking&#xD;&#xA;Dim cleanUrl As String = currentHref&#xD;&#xA;If cleanUrl.Contains(&quot;?&quot;) Then&#xD;&#xA;    cleanUrl = cleanUrl.Substring(0, cleanUrl.IndexOf(&quot;?&quot;))&#xD;&#xA;End If&#xD;&#xA;lst_Links.Add(cleanUrl)" DisplayName="Invoke Code" sap:VirtualizedContainerService.HintSize="416,188" sap2010:WorkflowViewState.IdRef="InvokeCode_1">
-            <ui:InvokeCode.Arguments>
-              <InArgument x:TypeArguments="x:String" x:Key="currentHref">
-                <VisualBasicValue x:TypeArguments="x:String" ExpressionText="currentHref" />
-              </InArgument>
-              <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="lst_Links">
-                <VisualBasicReference x:TypeArguments="scg:List(x:String)" ExpressionText="lst_Links" />
-              </InOutArgument>
-            </ui:InvokeCode.Arguments>
-          </ui:InvokeCode>
-        </Sequence>
-      </If.Then>
-      <If.Else>
-        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="449.6,89.6" sap2010:WorkflowViewState.IdRef="Sequence_8">
-          <sap:WorkflowViewStateService.ViewState>
-            <scg:Dictionary x:TypeArguments="x:String, x:Object">
-              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            </scg:Dictionary>
-          </sap:WorkflowViewStateService.ViewState>
-        </Sequence>
-      </If.Else>
-    </If>
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="' Use JavaScript to extract all job links directly from the page&#xA;' This replaces the unreliable FindChildren approach&#xA;Dim jsResult As String = str_JsOutput&#xA;If String.IsNullOrWhiteSpace(jsResult) OrElse jsResult = &quot;[]&quot; Then&#xA;    Return&#xA;End If&#xA;&#xA;' Parse the comma-separated job URLs&#xA;jsResult = jsResult.TrimStart(&quot;[&quot;c).TrimEnd(&quot;]&quot;c)&#xA;Dim urls() As String = jsResult.Split(New String() {&quot;&quot;&quot;,&quot;&quot;&quot;}, StringSplitOptions.RemoveEmptyEntries)&#xA;&#xA;For Each url As String In urls&#xA;    Dim cleanUrl As String = url.Trim(&quot;&quot;&quot;&quot;c).Trim&#xA;    If Not String.IsNullOrWhiteSpace(cleanUrl) AndAlso Not lst_Links.Contains(cleanUrl) Then&#xA;        lst_Links.Add(cleanUrl)&#xA;    End If&#xA;Next" DisplayName="Parse JS output into job links" sap:VirtualizedContainerService.HintSize="518.4,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_3">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="str_JsOutput">[str_JsOutput]</InArgument>
+        <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="lst_Links">[lst_Links]</InOutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
     <Assign sap:VirtualizedContainerService.HintSize="518.4,174.4" sap2010:WorkflowViewState.IdRef="Assign_7">
       <Assign.To>
         <OutArgument x:TypeArguments="scg:List(x:String)">[out_JobLinks]</OutArgument>
